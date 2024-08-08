@@ -1,0 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
+import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
+import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controller/theme_controller.dart';
+import 'package:tiffin_service_customer/views/components/textfilled/text_form_filled.dart';
+import 'package:tiffin_service_customer/views/pages/searchscreen/widgets/tranparent_btn.dart';
+part 'search_screen.dart';
