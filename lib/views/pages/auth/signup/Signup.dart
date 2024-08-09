@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:tiffin_service_customer/resources/Validator/validators.dart';
 import 'package:tiffin_service_customer/resources/config/app_services.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
@@ -10,17 +12,68 @@ import 'package:tiffin_service_customer/views/components/Button/Primarybtn.dart'
 import 'package:tiffin_service_customer/views/components/textfilled/Textfield.dart';
 import 'package:tiffin_service_customer/views/components/textrich/textrich_widget.dart';
 import 'package:tiffin_service_customer/views/pages/order_screen/subscription/widgets/date_range_picker.dart';
+import 'package:tiffin_service_customer/views/utils/utils.dart';
 
-class Signup extends StatelessWidget {
+class Signup extends StatefulWidget {
   Signup({super.key});
 
-  GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  @override
+  State<Signup> createState() => _SignupState();
+}
+
+class _SignupState extends State<Signup> {
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool loading = false;
+
+  @override
+  void dispose() {
+    _username.dispose();
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
+  Future<void> _signUp() async {
+    if (_globalKey.currentState!.validate()) {
+      setState(() {
+        loading = true;
+      });
+
+      try {
+        await _auth.createUserWithEmailAndPassword(
+          email: _email.text.trim(),
+          password: _password.text.trim(),
+        );
+        setState(() {
+          loading = false;
+        });
+        Get.toNamed(Routes.Otpverfication);
+      } on FirebaseAuthException catch (error) {
+        setState(() {
+          loading = false;
+        });
+        if (error.code == 'email-already-in-use') {
+          Utils().toastMessage(
+              "This email is already registered. Try logging in.");
+        } else {
+          Utils().toastMessage(error.message ?? "An error occurred");
+        }
+      } catch (error) {
+        setState(() {
+          loading = false;
+        });
+        Utils().toastMessage("An unexpected error occurred.");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SingleTonClass styles = SingleTonClass.instance;
-    TextEditingController _username = TextEditingController();
-    TextEditingController _email = TextEditingController();
-    TextEditingController _password = TextEditingController();
 
     return Scaffold(
       body: Form(
@@ -46,7 +99,6 @@ class Signup extends StatelessWidget {
                     Expanded(child: Divider())
                   ]),
                   Gap(20),
-                  // ---intlephinefield--
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -57,6 +109,7 @@ class Signup extends StatelessWidget {
                                     : styles.appcolors.black50)),
                         Gap(5),
                         Textfieldwidget(
+                            validator: UsernameValidator(),
                             controller: _username,
                             hinttext: LanguageConstants.enteryourname.tr),
                         Gap(10),
@@ -67,6 +120,7 @@ class Signup extends StatelessWidget {
                                     : styles.appcolors.black50)),
                         Gap(5),
                         Textfieldwidget(
+                            validator: EmailValidator(),
                             controller: _email,
                             hinttext: LanguageConstants.Mail.tr),
                         Gap(10),
@@ -77,22 +131,18 @@ class Signup extends StatelessWidget {
                                     : styles.appcolors.black50)),
                         Gap(5),
                         Textfieldwidget(
+                            validator: PasswordValidator(),
                             controller: _password,
                             hinttext: LanguageConstants.enteryourpassword.tr)
                       ]),
-
-                  // _Intlphonefield(),
                   Gap(25),
-                  // ---Primary btn--
                   Row(children: [
                     Primarybtn(
-                        name: LanguageConstants.signUp.tr,
-                        onPressed: () {
-                          if (_globalKey.currentState!.validate()) {
-                            return Get.toNamed(Routes.Otpverfication);
-                          }
-                        },
-                        isExpanded: true)
+                      loading: loading,
+                      name: LanguageConstants.signUp.tr,
+                      onPressed: _signUp,
+                      isExpanded: true,
+                    ),
                   ]),
                   Gap(20),
                   TextrichWidget(
@@ -102,9 +152,7 @@ class Signup extends StatelessWidget {
                       subtitle: LanguageConstants.logIn.tr,
                       title:
                           "${LanguageConstants.or.tr} ${LanguageConstants.continueText.tr} ${LanguageConstants.withText.tr} "),
-
                   Gap(10),
-                  // --google,facebook--
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     IconButton(
                         onPressed: () {},
