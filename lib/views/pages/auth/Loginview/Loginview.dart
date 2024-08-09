@@ -9,7 +9,7 @@ class Loginview extends StatelessWidget {
     SingleTonClass styles = SingleTonClass.instance;
     TextEditingController _email = TextEditingController();
     TextEditingController _password = TextEditingController();
-
+    
     return Scaffold(
       body: Form(
         key: _globalKey,
