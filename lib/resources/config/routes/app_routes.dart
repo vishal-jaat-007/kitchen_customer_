@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:tiffin_service_customer/views/pages/auth/signup/Signup.dart';
 
 import '../../../views/pages/pages.dart';
 
@@ -14,6 +15,7 @@ class AppPages {
       page: () => Onboardingscreen(),
     ),  
     GetPage(name: Routes.Loginview, page: () => Loginview()),
+    GetPage(name: Routes.Signup, page: () => Signup()),
     GetPage(name: Routes.Otpverfication, page: () => Otpverfication()),
     GetPage(name: Routes.Myprofileview, page: () => Myprofileview()),
     GetPage(
@@ -61,6 +63,7 @@ class Routes {
   static const home = '/';
   static const onboarding = '/onboarding';
   static const Loginview = '/Loginview';
+  static const Signup = '/Signup';
   static const Otpverfication = '/Otpverfication';
   static const Myprofileview = '/Myprofileview';
   static const CompleteYourProfile = '/CompleteYourProfile';
