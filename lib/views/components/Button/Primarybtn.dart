@@ -10,6 +10,7 @@ class Primarybtn extends StatelessWidget {
   double? radius;
   double height;
   double width;
+  final bool loading;
   Color? backgroundColor, foregroundColor, borderclr;
   Primarybtn(
       {super.key,
@@ -21,6 +22,7 @@ class Primarybtn extends StatelessWidget {
       this.width = 10,
       this.backgroundColor,
       this.borderclr,
+      this.loading = false,
       this.foregroundColor});
 
   @override
@@ -47,11 +49,16 @@ class Primarybtn extends StatelessWidget {
         onPressed: () {
           onPressed();
         },
-        child: Text(name,
-            style: styles.textthme.fs16_regular.copyWith(
-                color: foregroundColor == null
-                    ? styles.appcolors.whitecolor
-                    : foregroundColor)));
+        child: loading
+            ? CircularProgressIndicator(
+                color: styles.appcolors.whitecolor,
+                strokeWidth: 4,
+              )
+            : Text(name,
+                style: styles.textthme.fs16_regular.copyWith(
+                    color: foregroundColor == null
+                        ? styles.appcolors.whitecolor
+                        : foregroundColor)));
     return isExpanded ? Expanded(child: btn) : btn;
   }
 }

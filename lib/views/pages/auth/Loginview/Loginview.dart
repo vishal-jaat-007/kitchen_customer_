@@ -1,15 +1,54 @@
 part of "login.dart";
 
-class Loginview extends StatelessWidget {
+class Loginview extends StatefulWidget {
   Loginview({super.key});
 
-  GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  @override
+  State<Loginview> createState() => _LoginviewState();
+}
+
+class _LoginviewState extends State<Loginview> {
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool loading = false;
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
+  Future<void> login() async {
+    if (_globalKey.currentState!.validate()) {
+      setState(() {
+        loading = true;
+      });
+
+      try {
+        await _auth.signInWithEmailAndPassword(
+          email: _email.text.trim(),
+          password: _password.text.trim(),
+        );
+        Get.toNamed(Routes.Otpverfication);
+      } on FirebaseAuthException catch (error) {
+        Utils().toastMessage(error.message ?? "An error occurred");
+      } finally {
+        setState(() {
+          loading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SingleTonClass styles = SingleTonClass.instance;
     TextEditingController _email = TextEditingController();
     TextEditingController _password = TextEditingController();
-    
+
     return Scaffold(
       body: Form(
         key: _globalKey,
@@ -34,7 +73,7 @@ class Loginview extends StatelessWidget {
                     Expanded(child: Divider())
                   ]),
                   Gap(20),
-                  // ---intlephinefield--
+                  // ---input fields---
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -46,6 +85,7 @@ class Loginview extends StatelessWidget {
                         Gap(5),
                         Textfieldwidget(
                             controller: _email,
+                            validator: EmailValidator(),
                             hinttext: LanguageConstants.Mail.tr),
                         Gap(10),
                         Text("Password",
@@ -56,21 +96,18 @@ class Loginview extends StatelessWidget {
                         Gap(5),
                         Textfieldwidget(
                             controller: _password,
+                            validator: PasswordValidator(),
                             hinttext: LanguageConstants.enteryourpassword.tr)
                       ]),
-
-                  // _Intlphonefield(),
                   Gap(25),
-                  // ---Primary btn--
+                  // ---Primary button---
                   Row(children: [
                     Primarybtn(
-                        name: LanguageConstants.logIn.tr,
-                        onPressed: () {
-                          if (_globalKey.currentState!.validate()) {
-                            return Get.toNamed(Routes.Otpverfication);
-                          }
-                        },
-                        isExpanded: true)
+                      loading: loading,
+                      name: LanguageConstants.logIn.tr,
+                      onPressed: login,
+                      isExpanded: true,
+                    ),
                   ]),
                   Gap(20),
                   TextrichWidget(
@@ -80,9 +117,8 @@ class Loginview extends StatelessWidget {
                       subtitle: LanguageConstants.signUp.tr,
                       title:
                           "${LanguageConstants.or.tr} ${LanguageConstants.continueText.tr} ${LanguageConstants.withText.tr} "),
-
                   Gap(10),
-                  // --google,facebook--
+                  // --google, facebook--
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     IconButton(
                         onPressed: () {},
@@ -93,13 +129,8 @@ class Loginview extends StatelessWidget {
                         icon: Image.asset(styles.appicon.google)),
                   ]),
                   Gap(22),
-                  // Text(
-                  //   LanguageConstants.termsAndConditions.tr,
-                  //   style: styles.textthme.fs12_regular,
-                  //   textAlign: TextAlign.center,
-                  // ),
                 ],
-              )
+              ),
             ],
           ),
         ),

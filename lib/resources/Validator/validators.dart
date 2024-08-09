@@ -72,3 +72,41 @@ class EmailValidator extends AppValidator {
     return null;
   }
 }
+
+// ----------PASSWORD VALIDATOR-----
+class PasswordValidator extends AppValidator {
+  @override
+  String? validate(String title, String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter your password";
+    } else if (value.length < 8) {
+      return "Password must be at least 8 characters long";
+    } else if (!RegExp(r'^(?=.*[A-Z])').hasMatch(value)) {
+      return "Password must contain at least one uppercase letter";
+    } else if (!RegExp(r'^(?=.*[a-z])').hasMatch(value)) {
+      return "Password must contain at least one lowercase letter";
+    } else if (!RegExp(r'^(?=.*[0-9])').hasMatch(value)) {
+      return "Password must contain at least one number";
+    } else if (!RegExp(r'^(?=.*[!@#\$%^&*(),.?":{}|<>])').hasMatch(value)) {
+      return "Password must contain at least one special character";
+    }
+    return null;
+  }
+}
+
+// ----------USERNAME VALIDATOR-----
+class UsernameValidator extends AppValidator {
+  @override
+  String? validate(String title, String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter your username";
+    } else if (value.length < 4) {
+      return "Username must be at least 4 characters long";
+    } else if (value.contains(' ')) {
+      return "Username should not contain spaces";
+    } else if (!RegExp(r'^[a-zA-Z0-9_.-]+$').hasMatch(value)) {
+      return "Username can only contain letters, numbers, underscores, periods, or hyphens";
+    }
+    return null;
+  }
+}
