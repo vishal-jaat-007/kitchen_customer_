@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -12,6 +14,7 @@ import 'package:tiffin_service_customer/views/components/container/containerwidg
 import 'package:tiffin_service_customer/views/components/dilog/Logoutdialog.dart';
 
 import 'package:tiffin_service_customer/views/pages/Profileview/widget/profiletile.dart';
+import 'package:tiffin_service_customer/views/utils/utils.dart';
 
 import '../../../singletonClasses/singleton.dart';
 

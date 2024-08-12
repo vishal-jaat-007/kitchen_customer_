@@ -51,7 +51,7 @@ class _SignupState extends State<Signup> {
         setState(() {
           loading = false;
         });
-        Get.toNamed(Routes.Otpverfication);
+        Get.toNamed(Routes.CompleteYourProfile);
       } on FirebaseAuthException catch (error) {
         setState(() {
           loading = false;

@@ -14,6 +14,7 @@ class Myprofileview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth _auth = FirebaseAuth.instance;
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
@@ -92,13 +93,19 @@ class Myprofileview extends StatelessWidget {
                     Profiletile(
                         onPressed: () {
                           Get.dialog(Logoutdialog(
-                              onPressed: () {
+                            onPressed: () {
+                              _auth.signOut().then((value) {
                                 Get.toNamed(Routes.Loginview);
-                              },
-                              title: LanguageConstants.logout.tr,
-                              subtitle:
-                                  LanguageConstants.logout_confirmation.tr,
-                              Buttonname: LanguageConstants.yes_logout.tr));
+                              }).onError(
+                                (error, stackTrace) {
+                                  Utils().toastMessage(error.toString());
+                                },
+                              );
+                            },
+                            title: LanguageConstants.logout.tr,
+                            subtitle: LanguageConstants.logout_confirmation.tr,
+                            Buttonname: LanguageConstants.yes_logout.tr,
+                          ));
                         },
                         image: styles.appicon.lockout,
                         name: LanguageConstants.logout.tr)

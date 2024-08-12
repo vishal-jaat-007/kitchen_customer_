@@ -33,7 +33,7 @@ class _LoginviewState extends State<Loginview> {
           password: _password.text.trim(),
         );
         // Navigate to the OTP verification page on successful login
-        Get.toNamed(Routes.Otpverfication);
+        Get.toNamed(Routes.CompleteYourProfile);
       } on FirebaseAuthException catch (error) {
         // Display error message to the user
         Utils().toastMessage(error.message ?? "An error occurred");
