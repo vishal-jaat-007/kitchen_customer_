@@ -32,8 +32,10 @@ class _LoginviewState extends State<Loginview> {
           email: _email.text.trim(),
           password: _password.text.trim(),
         );
-        Get.toNamed(Routes.Otpverfication);
+        // Navigate to the OTP verification page on successful login
+        Get.toNamed(Routes.CompleteYourProfile);
       } on FirebaseAuthException catch (error) {
+        // Display error message to the user
         Utils().toastMessage(error.message ?? "An error occurred");
       } finally {
         setState(() {
@@ -46,8 +48,6 @@ class _LoginviewState extends State<Loginview> {
   @override
   Widget build(BuildContext context) {
     SingleTonClass styles = SingleTonClass.instance;
-    TextEditingController _email = TextEditingController();
-    TextEditingController _password = TextEditingController();
 
     return Scaffold(
       body: Form(
