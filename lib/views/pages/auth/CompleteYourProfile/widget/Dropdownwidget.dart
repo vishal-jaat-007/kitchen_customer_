@@ -12,7 +12,6 @@ class GenderDropDownWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DropdownEditingController<String> _datacontroller =
         DropdownEditingController();
     SingleTonClass styles = SingleTonClass.instance;
     final controller = Get.find<ThemeController>();
