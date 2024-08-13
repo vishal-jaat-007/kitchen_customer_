@@ -8,6 +8,8 @@ import 'package:tiffin_service_customer/resources/config/app_services.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
 import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
+import 'package:tiffin_service_customer/view_model/controllers/auth/authcontroller.dart';
+import 'package:tiffin_service_customer/view_model/model/user/userdata.dart';
 import 'package:tiffin_service_customer/views/components/Button/Primarybtn.dart';
 import 'package:tiffin_service_customer/views/components/textfilled/Textfield.dart';
 import 'package:tiffin_service_customer/views/components/textrich/textrich_widget.dart';
@@ -45,9 +47,7 @@ class _SignupState extends State<Signup> {
 
       try {
         await _auth.createUserWithEmailAndPassword(
-          email: _email.text.trim(),
-          password: _password.text.trim(),
-        );
+            email: _email.text.trim(), password: _password.text.trim());
         setState(() {
           loading = false;
         });
@@ -140,7 +140,15 @@ class _SignupState extends State<Signup> {
                     Primarybtn(
                       loading: loading,
                       name: LanguageConstants.signUp.tr,
-                      onPressed: _signUp,
+                      onPressed: () async {
+                        final data = Usermodel(
+                            name: _username.text.trim(),
+                            email: _email.text.trim());
+                        await Usercontroller().signUp({
+                          "user": data.tojson(),
+                          "password": _password.text.trim()
+                        }, context);
+                      },
                       isExpanded: true,
                     ),
                   ]),
