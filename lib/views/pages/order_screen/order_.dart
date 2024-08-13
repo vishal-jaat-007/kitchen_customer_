@@ -14,7 +14,7 @@ import 'package:tiffin_service_customer/view_model/controllers/food_controller.d
 import 'package:tiffin_service_customer/view_model/model/categeroy_model.dart';
 import 'package:tiffin_service_customer/views/components/Appbar/appbar.dart';
 import 'package:tiffin_service_customer/views/components/Button/menu_btn.dart';
-import 'package:tiffin_service_customer/views/components/Divider/titleBar.dart';
+import 'package:tiffin_service_customer/views/components/Divider/titleBar.dart'; 
 import 'package:tiffin_service_customer/views/components/checkbox/checkbox.dart';
 import 'package:tiffin_service_customer/views/components/container/containerwidget.dart';
 import 'package:tiffin_service_customer/views/components/dilog/coupon_dilog.dart';
