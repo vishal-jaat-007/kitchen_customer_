@@ -6,8 +6,11 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:tiffin_service_customer/resources/Validator/validators.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
+import 'package:tiffin_service_customer/resources/utils/Apis/apis.dart';
 import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
 import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controller/theme_controller.dart';
+import 'package:tiffin_service_customer/view_model/controllers/user_controller.dart';
+import 'package:tiffin_service_customer/view_model/model/user/userdata.dart';
 import 'package:tiffin_service_customer/views/components/Appbar/appbar.dart';
 import 'package:tiffin_service_customer/views/components/Button/Primarybtn.dart';
 import 'package:tiffin_service_customer/views/components/Dilog/Profileeditdialog.dart';
@@ -25,118 +28,190 @@ class Profileedit extends StatefulWidget {
 }
 
 class _ProfileeditState extends State<Profileedit> {
-  GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  late final UserController _userController;
+  late final TextEditingController _emailController;
+  late final TextEditingController _nameController;
+  late final TextEditingController _birthDateController;
+  late final TextEditingController _genderController;
+  File? imageFile;
 
-  File? imagefile;
+  @override
+  void initState() {
+    super.initState();
+    _userController = Get.find<UserController>();
+    _nameController =
+        TextEditingController(text: _userController.user.username ?? '');
+    _emailController =
+        TextEditingController(text: _userController.user.email ?? '');
+    _birthDateController =
+        TextEditingController(text: _userController.user.dob ?? '');
+    _genderController =
+        TextEditingController(text: _userController.user.gender ?? '');
+
+    if (_userController.user.profileImage.isNotEmpty) {
+      // Check if the profile image path is a URL or local path
+      if (Uri.parse(_userController.user.profileImage).isAbsolute) {
+        // Handle URL
+        imageFile = null; // For network image
+      } else {
+        // Handle local file
+        imageFile = File(_userController.user.profileImage);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _nameController.dispose();
+    _birthDateController.dispose();
+    _genderController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    SingleTonClass styles = SingleTonClass.instance;
     final controller = Get.find<ThemeController>();
-    return Scaffold(
-        appBar: PrimaryAppBar(titleText: LanguageConstants.editProfile.tr),
-        body: Form(
-          key: _globalKey,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: ListView(children: [
-              Containerwidget(
-                  padding: EdgeInsets.symmetric(vertical: 40),
-                  shadow: false,
-                  child: Center(
-                      // -----STACK--
-                      child: Stack(alignment: Alignment(0.9, 1), children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: imagefile == null
-                            ? Image.asset(styles.appimg.Profileimg,
-                                height: 134, width: 134, fit: BoxFit.cover)
-                            : Image.file(imagefile!,
-                                height: 134, width: 134, fit: BoxFit.cover)),
-                    // -----IMAGE--
-                    InkWell(
-                        onTap: () async {
-                          var result = await Get.bottomSheet(Image_Picker());
+    SingleTonClass styles = SingleTonClass.instance;
 
+    return Scaffold(
+      appBar: PrimaryAppBar(titleText: LanguageConstants.editProfile.tr),
+      body: Form(
+        key: _globalKey,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: ListView(
+            children: [
+              Containerwidget(
+                padding: EdgeInsets.symmetric(vertical: 40),
+                shadow: false,
+                child: Center(
+                  child: Stack(alignment: Alignment(0.9, 1), children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: imageFile == null
+                          ? (Uri.parse(_userController.user.profileImage)
+                                  .isAbsolute
+                              ? Image.network(_userController.user.profileImage,
+                                  height: 134, width: 134, fit: BoxFit.cover)
+                              : Image.asset(styles.appimg.Profileimg,
+                                  height: 134, width: 134, fit: BoxFit.cover))
+                          : Image.file(imageFile!,
+                              height: 134, width: 134, fit: BoxFit.cover),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        var result = await Get.bottomSheet(Image_Picker());
+                        if (result != null) {
                           setState(() {
-                            imagefile = result;
+                            imageFile = result;
+                            _userController.updateProfileImage(result);
                           });
-                        },
-                        child: Container(
-                            height: 38.h,
-                            width: 38.h,
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 1.r,
-                                      offset: Offset(0, 1))
-                                ],
-                                shape: BoxShape.circle,
-                                color: styles.appcolors.whitecolor),
-                            child: Icon(Icons.edit_outlined,
-                                size: 25,
-                                color: styles.appcolors.primarycolor)))
-                    // ---textfield---
-                  ]))),
+                        }
+                      },
+                      child: Container(
+                        height: 38.h,
+                        width: 38.h,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey,
+                                blurRadius: 1.r,
+                                offset: Offset(0, 1))
+                          ],
+                          shape: BoxShape.circle,
+                          color: styles.appcolors.whitecolor,
+                        ),
+                        child: Icon(Icons.edit_outlined,
+                            size: 25, color: styles.appcolors.primarycolor),
+                      ),
+                    )
+                  ]),
+                ),
+              ),
               Gap(15),
-              Column(children: [
-                Containerwidget(
-                    child: Column(
+              Containerwidget(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // -----NAME--
                     Text(LanguageConstants.name.tr,
                         style: styles.textthme.fs16_regular.copyWith(
                             color: controller.isDarkMode()
                                 ? styles.appcolors.whitecolor
                                 : styles.appcolors.black50)),
                     Textfieldwidget(
-                        validator: TextValidator(),
-                        hinttext: LanguageConstants.enteryourname.tr),
+                      controller: _nameController,
+                      hinttext: LanguageConstants.enteryourname.tr,
+                      validator: TextValidator(),
+                    ),
                     Gap(10),
-
-                    // -----MOBILE--
-                    Text(LanguageConstants.mobile.tr,
-                        style: styles.textthme.fs16_regular.copyWith(
-                            color: controller.isDarkMode()
-                                ? styles.appcolors.whitecolor
-                                : styles.appcolors.black50)),
-                    Textfieldwidget(hinttext: "8708534070", suffic: true),
-                    Gap(10),
-                    // -----EMAIL--
                     Text(LanguageConstants.email.tr,
                         style: styles.textthme.fs16_regular.copyWith(
                             color: controller.isDarkMode()
                                 ? styles.appcolors.whitecolor
                                 : styles.appcolors.black50)),
                     Textfieldwidget(
+                      controller: _emailController,
                       hinttext: LanguageConstants.Mail.tr,
-                      suffic: true,
+                      validator: EmailValidator(),
                     ),
-                    Gap(30), // -----SHOW DATEPICKER--
+                    Gap(30),
                     Showdatepickerwidget(
-                      hinttext: "DD/MM/YY".tr,
+                      datecontroller: _birthDateController,
+                      hinttext: "DD/MM/YY",
                     ),
-                    Gap(30), // -----DROPDOWN--
-                    GenderDropDownWidget()
+                    Gap(30),
+                    GenderDropDownWidget(gendercontroller: _genderController),
                   ],
-                )),
-                Gap(15), // -----PRIMARY BTN--
-                Row(children: [
+                ),
+              ),
+              Gap(15),
+              Row(
+                children: [
                   Primarybtn(
-                      isExpanded: true,
-                      name: LanguageConstants.update_profile.tr,
-                      onPressed: () {
-                        if (_globalKey.currentState!.validate()) {
-                          return Profileeditdialog();
+                    isExpanded: true,
+                    name: LanguageConstants.update_profile.tr,
+                    onPressed: () async {
+                      if (_globalKey.currentState!.validate()) {
+                        _userController.setLoading(true);
+                        try {
+                          await Apis.updateUser(
+                            id: _userController.user.uid,
+                            username: _nameController.text.trim(),
+                            email: _emailController.text.trim(),
+                            dob: _birthDateController.text.trim(),
+                            gender: _genderController.text.trim(),
+                            profileImage: imageFile,
+                          );
+
+                          _userController.setUser(Usermodel(
+                            uid: _userController.user.uid,
+                            username: _nameController.text.trim(),
+                            email: _emailController.text.trim(),
+                            dob: _birthDateController.text.trim(),
+                            gender: _genderController.text.trim(),
+                            profileImage: imageFile?.path ?? "",
+                          ));
+
+                          Profileeditdialog(); // Show success dialog
+                        } catch (e) {
+                          print(e.toString());
+                          Get.snackbar('Error',
+                              'Failed to update profile. Please try again.');
+                        } finally {
+                          _userController.setLoading(false);
                         }
-                        ;
-                      }),
-                ]),
-                Gap(10)
-              ])
-            ]),
+                      }
+                    },
+                  ),
+                ],
+              ),
+              Gap(10),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

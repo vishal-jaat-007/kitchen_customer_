@@ -9,11 +9,12 @@ import '../../../../../resources/primary_decorations.dart';
 
 class Showdatepickerwidget extends StatefulWidget {
   String? hinttext;
-  
+  TextEditingController? datecontroller;
 
   Showdatepickerwidget({
     super.key,
     this.hinttext,
+    this.datecontroller,
   });
 
   @override
@@ -24,13 +25,13 @@ class _ShowdatepickerwidgetState extends State<Showdatepickerwidget> {
   DateTime selectedDate = DateTime.now();
 
   SingleTonClass styles = SingleTonClass.instance;
-  final TextEditingController datecontrollrs = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
         validator: (value) =>
             TextValidator().validate(LanguageConstants.dateofbirth.tr, value),
-        controller: datecontrollrs,
+        controller: widget.datecontroller,
         readOnly: true,
         onTap: () async {
           final DateTime? picked = await showDatePicker(
@@ -40,9 +41,8 @@ class _ShowdatepickerwidgetState extends State<Showdatepickerwidget> {
               lastDate: selectedDate);
           if (picked != null) {
             setState(() {
-              datecontrollrs.text = "${picked.toLocal()}".split(" ")[0];
+              widget.datecontroller!.text = "${picked.toLocal()}".split(" ")[0];
             });
-        
           }
         },
         decoration: PrimaryDecorations.primaryTextFieldDecoration.copyWith(

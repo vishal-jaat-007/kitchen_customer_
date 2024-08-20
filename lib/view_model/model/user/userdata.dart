@@ -1,28 +1,59 @@
 class Usermodel {
-  String? id;
-  String? email;
-  String? name;
-  Usermodel({this.id, this.name, this.email});
+  String uid;
+  String email;
+  String username;
+  String gender;
+  String dob;
+  DateTime? createdAt;
+  String profileImage; 
 
-  Map<String, dynamic> tojson() {
-    return {
-      "id": id,
-      "name": name,
-      "email": email,
-    };
-  }
+  Usermodel({
+    this.uid = "",
+    this.email = "",
+    this.username = "",
+    this.gender = "",
+    this.dob = "",
+    this.createdAt,
+    this.profileImage = "", 
+  });
 
-  Usermodel copywith(
-      {String? id, String? name, String? email, String? password}) {
+  Usermodel.fromJson(Map<String, dynamic> json, this.uid)
+      : email = json["email"] ?? "",
+        username = json["username"] ?? "",
+        gender = json["gender"] ?? "",
+        dob = json["dob"] ?? "",
+        createdAt = (json["createdAt"] != null)
+            ? DateTime.tryParse(json["createdAt"])
+            : null,
+        profileImage = json["profileImage"] ?? ""; 
+
+  Map<String, dynamic> tojson() => {
+        "uid": uid,
+        "email": email,
+        "username": username,
+        "gender": gender,
+        "dob": dob,
+        "createdAt": createdAt?.toIso8601String(),
+        "profileImage": profileImage, 
+      };
+
+  Usermodel copyWith({
+    String? uid,
+    String? email,
+    String? username,
+    String? gender,
+    String? dob,
+    DateTime? createdAt,
+    String? profileImage, 
+  }) {
     return Usermodel(
-      id: id ?? this.id,
-      name: name ?? this.name,
+      uid: uid ?? this.uid,
       email: email ?? this.email,
+      username: username ?? this.username,
+      gender: gender ?? this.gender,
+      dob: dob ?? this.dob,
+      createdAt: createdAt ?? this.createdAt,
+      profileImage: profileImage ?? this.profileImage,
     );
   }
-
-  Usermodel.fromojson(Map<String, dynamic> json)
-      : id = json["id"],
-        email = json["email"],
-        name = json["name"];
 }

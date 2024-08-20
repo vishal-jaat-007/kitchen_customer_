@@ -13,14 +13,14 @@ class _LoginviewState extends State<Loginview> {
   final TextEditingController _password = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool loading = false;
-  
+
   @override
   void dispose() {
     _email.dispose();
     _password.dispose();
     super.dispose();
   }
- 
+
   Future<void> login() async {
     if (_globalKey.currentState!.validate()) {
       setState(() {
@@ -105,7 +105,14 @@ class _LoginviewState extends State<Loginview> {
                     Primarybtn(
                       loading: loading,
                       name: LanguageConstants.logIn.tr,
-                      onPressed: login,
+                      onPressed: () async {
+                        if (_globalKey.currentState!.validate()) {
+                          await AuthDataHandler().login(
+                            email: _email.text,
+                            password: _password.text,
+                          );
+                        }
+                      },
                       isExpanded: true,
                     ),
                   ]),

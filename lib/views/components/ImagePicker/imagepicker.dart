@@ -19,7 +19,7 @@ class Image_Picker extends StatefulWidget {
 
 class _Image_PickerState extends State<Image_Picker> {
   final controller = Get.find<ThemeController>();
-  File? imagefile;
+  File? imagefile;  
   int currentindex = -1;
   getImageFormGallery() async {
     // ignore: invalid_use_of_visible_for_testing_member

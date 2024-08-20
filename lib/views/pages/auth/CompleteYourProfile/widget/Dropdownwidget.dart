@@ -8,19 +8,22 @@ import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controlle
 import 'package:tiffin_service_customer/view_model/enums/enums.dart';
 
 class GenderDropDownWidget extends StatelessWidget {
-  GenderDropDownWidget({super.key});
+  TextEditingController? gendercontroller;
+  GenderDropDownWidget({super.key, this.gendercontroller});
 
   @override
   Widget build(BuildContext context) {
-        DropdownEditingController();
+    DropdownEditingController();
     SingleTonClass styles = SingleTonClass.instance;
     final controller = Get.find<ThemeController>();
 
     final optionsList = Gender.values.map((e) => e.toString()).toList();
 
     return TextDropdownFormField(
+      controller: DropdownEditingController(value: gendercontroller?.text),
       // validator: (String? value) => TextValidator().validate("Gender", value!),
-      options: optionsList, dropdownHeight: 100,
+      options: optionsList,
+      dropdownHeight: 100,
       dropdownItemColor: styles.appcolors.primarycolor,
       dropdownColor: controller.isDarkMode()
           ? styles.appcolors.darktheme_highlight

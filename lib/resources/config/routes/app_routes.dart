@@ -13,7 +13,7 @@ class AppPages {
     GetPage(
       name: Routes.onboarding,
       page: () => Onboardingscreen(),
-    ),  
+    ),
     GetPage(name: Routes.Loginview, page: () => Loginview()),
     GetPage(name: Routes.Signup, page: () => Signup()),
     GetPage(name: Routes.Otpverfication, page: () => Otpverfication()),
@@ -22,7 +22,7 @@ class AppPages {
         name: Routes.CompleteYourProfile, page: () => CompleteYourProfile()),
     GetPage(name: Routes.bottomnavigationbar, page: () => MyBottomNavi()),
     GetPage(name: Routes.Billingscreen, page: () => Billingscreen()),
-    GetPage(name: Routes.Profileeditscreen, page: () => Profileedit()), 
+    GetPage(name: Routes.Profileeditscreen, page: () => Profileedit()),
     GetPage(name: Routes.Applicationsetting, page: () => Applicationsetting()),
     GetPage(name: Routes.Changetheme, page: () => Changetheme()),
     GetPage(name: Routes.Changelanguage, page: () => Changelanguage()),
@@ -59,7 +59,7 @@ class AppPages {
   ];
 }
 
-class Routes {  
+class Routes {
   static const home = '/';
   static const onboarding = '/onboarding';
   static const Loginview = '/Loginview';

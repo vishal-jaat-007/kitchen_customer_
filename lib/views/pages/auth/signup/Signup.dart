@@ -1,20 +1,18 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:tiffin_service_customer/backend/network/backend/auth_data_handler.dart';
 import 'package:tiffin_service_customer/resources/Validator/validators.dart';
 import 'package:tiffin_service_customer/resources/config/app_services.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
 import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
-import 'package:tiffin_service_customer/view_model/controllers/auth/authcontroller.dart';
 import 'package:tiffin_service_customer/view_model/model/user/userdata.dart';
 import 'package:tiffin_service_customer/views/components/Button/Primarybtn.dart';
 import 'package:tiffin_service_customer/views/components/textfilled/Textfield.dart';
 import 'package:tiffin_service_customer/views/components/textrich/textrich_widget.dart';
 import 'package:tiffin_service_customer/views/pages/order_screen/subscription/widgets/date_range_picker.dart';
-import 'package:tiffin_service_customer/views/utils/utils.dart';
 
 class Signup extends StatefulWidget {
   Signup({super.key});
@@ -28,7 +26,6 @@ class _SignupState extends State<Signup> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   bool loading = false;
 
   @override
@@ -37,38 +34,6 @@ class _SignupState extends State<Signup> {
     _email.dispose();
     _password.dispose();
     super.dispose();
-  }
-
-  Future<void> _signUp() async {
-    if (_globalKey.currentState!.validate()) {
-      setState(() {
-        loading = true;
-      });
-
-      try {
-        await _auth.createUserWithEmailAndPassword(
-            email: _email.text.trim(), password: _password.text.trim());
-        setState(() {
-          loading = false;
-        });
-        Get.toNamed(Routes.CompleteYourProfile);
-      } on FirebaseAuthException catch (error) {
-        setState(() {
-          loading = false;
-        });
-        if (error.code == 'email-already-in-use') {
-          Utils().toastMessage(
-              "This email is already registered. Try logging in.");
-        } else {
-          Utils().toastMessage(error.message ?? "An error occurred");
-        }
-      } catch (error) {
-        setState(() {
-          loading = false;
-        });
-        Utils().toastMessage("An unexpected error occurred.");
-      }
-    }
   }
 
   @override
@@ -141,13 +106,34 @@ class _SignupState extends State<Signup> {
                       loading: loading,
                       name: LanguageConstants.signUp.tr,
                       onPressed: () async {
-                        final data = Usermodel(
-                            name: _username.text.trim(),
-                            email: _email.text.trim());
-                        await Usercontroller().signUp({
-                          "user": data.tojson(),
-                          "password": _password.text.trim()
-                        }, context);
+                        if (_globalKey.currentState!.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
+                          try {
+                            await AuthDataHandler().signup(
+                                user: Usermodel(
+                                    createdAt: DateTime.now(),
+                                    username: _username.text,
+                                    email: _email.text,
+                                    dob: '',
+                                    gender: ''),
+                                password: _password.text);
+                          } catch (e) {
+                            Get.snackbar(
+                              LanguageConstants.enteryourname.tr,
+                              e.toString(),
+                              backgroundColor: styles.appcolors.darkorange,
+                              colorText:
+                                  Colors.white, // Optional: Adjust text color
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          } finally {
+                            setState(() {
+                              loading = false;
+                            });
+                          }
+                        }
                       },
                       isExpanded: true,
                     ),

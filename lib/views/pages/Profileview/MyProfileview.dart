@@ -57,7 +57,6 @@ class Myprofileview extends StatelessWidget {
                     DividerWidget(isCenterGradient: true),
                     Profiletile(
                         onPressed: () {
-
                           Get.toNamed(Routes.Manageaddress);
                         },
                         image: styles.appicon.manageaddress,
