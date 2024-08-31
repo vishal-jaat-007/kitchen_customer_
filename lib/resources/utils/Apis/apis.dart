@@ -17,6 +17,65 @@ class Apis {
   static DocumentReference userDocumentRef(String id) =>
       userCollectionRef.doc(id);
 
+  // Method to get saved addresses
+  static Future<List<Map<String, dynamic>>> getSavedAddresses({
+    required String userId,
+  }) async {
+    try {
+      QuerySnapshot snapshot = await userDocumentRef(userId)
+          .collection('addresses')
+          .orderBy('createdAt', descending: true)
+          .get();
+      return snapshot.docs
+          .map((doc) => {'id': doc.id, ...doc.data() as Map<String, dynamic>})
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch addresses: $e');
+    }
+  }
+
+  // Method to delete an address
+  static Future<void> deleteAddress({
+    required String userId,
+    required String addressId,
+  }) async {
+    try {
+      await userDocumentRef(userId)
+          .collection('addresses')
+          .doc(addressId)
+          .delete();
+    } catch (e) {
+      throw Exception('Failed to delete address: $e');
+    }
+  }
+
+  // Other methods...
+
+  // Method to add a new address
+  static Future<void> addAddress({
+    required String userId,
+    required String houseNo,
+    required String addressTitle,
+    required String contactName,
+    required String contactNumber,
+    required double latitude,
+    required double longitude,
+  }) async {
+    try {
+      await userDocumentRef(userId).collection('addresses').add({
+        'houseNo': houseNo,
+        'addressTitle': addressTitle,
+        'contactName': contactName,
+        'contactNumber': contactNumber,
+        'latitude': latitude,
+        'longitude': longitude,
+        'createdAt': DateTime.now().toIso8601String(),
+      });
+    } catch (e) {
+      throw Exception('Failed to add address: $e');
+    }
+  }
+
   // Method to upload an image to Firebase Storage
   static Future<String?> uploadImageToFirebase(File image) async {
     try {

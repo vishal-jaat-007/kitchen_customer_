@@ -12,7 +12,7 @@ class OrderModel {
     required this.image,
     required this.foodtype,
     required this.foodname,
-    required this.time,
+    required this.time,    
     required this.rating,
   });
 }

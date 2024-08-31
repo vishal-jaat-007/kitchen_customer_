@@ -8,31 +8,30 @@ import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controlle
 import 'package:tiffin_service_customer/view_model/enums/enums.dart';
 
 class GenderDropDownWidget extends StatelessWidget {
-  TextEditingController? gendercontroller;
-  GenderDropDownWidget({super.key, this.gendercontroller});
+  final TextEditingController? genderController;
+
+  GenderDropDownWidget({super.key, this.genderController});
 
   @override
   Widget build(BuildContext context) {
-    DropdownEditingController();
-    SingleTonClass styles = SingleTonClass.instance;
-    final controller = Get.find<ThemeController>();
+    final SingleTonClass styles = SingleTonClass.instance;
+    final ThemeController themeController = Get.find<ThemeController>();
 
     final optionsList = Gender.values.map((e) => e.toString()).toList();
 
     return TextDropdownFormField(
-      controller: DropdownEditingController(value: gendercontroller?.text),
-      // validator: (String? value) => TextValidator().validate("Gender", value!),
+      controller:
+          DropdownEditingController(value: genderController?.text ?? ''),
       options: optionsList,
       dropdownHeight: 100,
       dropdownItemColor: styles.appcolors.primarycolor,
-      dropdownColor: controller.isDarkMode()
+      dropdownColor: themeController.isDarkMode()
           ? styles.appcolors.darktheme_highlight
           : styles.appcolors.whitecolor,
       findFn: (v) async => v.trim().isEmpty
           ? optionsList
           : optionsList
               .where((element) => element
-                  .toString()
                   .toLowerCase()
                   .trim()
                   .startsWith(v.toLowerCase().trim()))
@@ -41,6 +40,11 @@ class GenderDropDownWidget extends StatelessWidget {
         labelText: LanguageConstants.gender.tr,
         suffixIcon: Icon(Icons.keyboard_arrow_down_outlined),
       ),
+      onChanged: (String? value) {
+        if (genderController != null) {
+          genderController!.text = value ?? ''; // Ensure value is not null
+        }
+      },
     );
   }
 }

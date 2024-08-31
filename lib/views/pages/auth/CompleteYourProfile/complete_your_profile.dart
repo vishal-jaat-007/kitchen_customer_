@@ -46,6 +46,8 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
     userId = args['uid'] as String;
     _email = TextEditingController(text: args['email'] as String);
     _nameController = TextEditingController(text: args['username'] as String);
+    _birthDateController.text = args['dob'] as String;
+    _genderController.text = args['gender'] as String;
   }
 
   @override
@@ -148,7 +150,9 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
                         datecontroller: _birthDateController,
                         hinttext: "DD/MM/YY"),
                     Gap(20),
-                    GenderDropDownWidget(gendercontroller: _genderController),
+                    GenderDropDownWidget(
+                      genderController: _genderController,
+                    ),
                   ],
                 ),
               ),

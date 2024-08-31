@@ -50,12 +50,9 @@ class _ProfileeditState extends State<Profileedit> {
         TextEditingController(text: _userController.user.gender ?? '');
 
     if (_userController.user.profileImage.isNotEmpty) {
-      // Check if the profile image path is a URL or local path
       if (Uri.parse(_userController.user.profileImage).isAbsolute) {
-        // Handle URL
-        imageFile = null; // For network image
+        imageFile = null;
       } else {
-        // Handle local file
         imageFile = File(_userController.user.profileImage);
       }
     }
@@ -162,7 +159,7 @@ class _ProfileeditState extends State<Profileedit> {
                       hinttext: "DD/MM/YY",
                     ),
                     Gap(30),
-                    GenderDropDownWidget(gendercontroller: _genderController),
+                    GenderDropDownWidget(genderController: _genderController),
                   ],
                 ),
               ),

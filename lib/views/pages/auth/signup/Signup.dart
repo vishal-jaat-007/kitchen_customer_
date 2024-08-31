@@ -124,8 +124,7 @@ class _SignupState extends State<Signup> {
                               LanguageConstants.enteryourname.tr,
                               e.toString(),
                               backgroundColor: styles.appcolors.darkorange,
-                              colorText:
-                                  Colors.white, // Optional: Adjust text color
+                              colorText: styles.appcolors.whitecolor,
                               snackPosition: SnackPosition.BOTTOM,
                             );
                           } finally {

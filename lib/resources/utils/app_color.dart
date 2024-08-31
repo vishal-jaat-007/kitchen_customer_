@@ -29,4 +29,6 @@ class AppColor {
   Color green = Colors.green;
   Color orangecolor = Color(0xffFC4100);
   Color darkorange = Color(0xff750E00);
+
+  get greyDark => null;
 }
