@@ -9,6 +9,8 @@ import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart'
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
 import 'package:tiffin_service_customer/resources/primary_decorations.dart';
 import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
+import 'package:tiffin_service_customer/view_model/controllers/product/product_controller.dart';
+import 'package:tiffin_service_customer/view_model/model/product_model.dart';
 import 'package:tiffin_service_customer/views/components/Button/Primarybtn.dart';
 import 'package:tiffin_service_customer/resources/Validator/validators.dart';
 import 'package:tiffin_service_customer/views/components/textfilled/Textfield.dart';

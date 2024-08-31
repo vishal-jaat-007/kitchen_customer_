@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class firebasemodel {
+class usermodel {
   String? id;
   String? email;
   String? name;
   String? phoneNumber;
   String? dob;
 
-  firebasemodel({
+  usermodel({
     this.id,
     this.name,
     this.email,
@@ -15,12 +15,13 @@ class firebasemodel {
     this.dob,
   });
 
-  firebasemodel.fromjson(FirebaseResponseModel json)
-      : name = json.data["name"] ?? "",
-        email = json.data["email"] ?? "",
-        id = json.docId,
-        phoneNumber = json.data["phonenumber"] ?? "",
-        dob = json.data["dob"] ?? "";
+  usermodel.fromjson(FirebaseResponseModel map)
+      :id = map.docId, 
+      name = map.data["name"] ?? "",
+        email = map.data["email"] ?? "",
+        
+        phoneNumber = map.data["phonenumber"] ?? "",
+        dob = map.data["dob"] ?? "";
 
   Map<String, dynamic> tojson() {
     return {

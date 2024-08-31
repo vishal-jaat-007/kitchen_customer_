@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -31,6 +32,7 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
   final TextEditingController _birthDateController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
   File? imagefile;
+  DatabaseReference datareference = FirebaseDatabase.instance.ref("profileimg");
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +49,17 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
           padding: const EdgeInsets.all(15.0),
           child: ListView(children: [
             Containerwidget(
-              shadow: false,
-              child: Center(
-                child: Stack(
-                  alignment: Alignment(0.9, 1.2),
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100.r), 
+                shadow: false,
+                child: Center(
+                    child: Stack(alignment: Alignment(0.9, 1.2), children: [
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(100.r),
                       child: imagefile == null
                           ? Image.asset(styles.appimg.Profileimg,
                               height: 134, width: 134, fit: BoxFit.cover)
                           : Image.file(imagefile!,
-                              height: 134, width: 134, fit: BoxFit.cover),
-                    ),
-                    InkWell(
+                              height: 134, width: 134, fit: BoxFit.cover)),
+                  InkWell(
                       onTap: () async {
                         var result = await Get.bottomSheet(Image_Picker());
                         setState(() {
@@ -68,27 +67,20 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
                         });
                       },
                       child: Container(
-                        height: 44.h,
-                        width: 44.w,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 1.r,
-                              offset: Offset(0, 1),
-                            )
-                          ],
-                          shape: BoxShape.circle,
-                          color: styles.appcolors.whitecolor,
-                        ),
-                        child: Icon(Icons.edit_outlined,
-                            size: 25, color: styles.appcolors.primarycolor),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+                          height: 44.h,
+                          width: 44.w,
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 1.r,
+                                    offset: Offset(0, 1))
+                              ],
+                              shape: BoxShape.circle,
+                              color: styles.appcolors.whitecolor),
+                          child: Icon(Icons.edit_outlined,
+                              size: 25, color: styles.appcolors.primarycolor)))
+                ]))),
             Gap(15),
             Containerwidget(
               child: Column(
@@ -100,10 +92,10 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
                               ? styles.appcolors.whitecolor
                               : styles.appcolors.black50)),
                   Textfieldwidget(
-                    controller: _nameController,
-                    hinttext: LanguageConstants.enteryourname.tr,
-                    // validator: TextValidator()
-                  ),
+                      controller: _nameController,
+                      hinttext: LanguageConstants.enteryourname.tr
+                      // validator: TextValidator()
+                      ),
                   Gap(10),
                   Text(LanguageConstants.phoneNumber.tr,
                       style: styles.textthme.fs16_regular.copyWith(
@@ -111,11 +103,10 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
                               ? styles.appcolors.whitecolor
                               : styles.appcolors.black30)),
                   Textfieldwidget(
-                    controller: _password,
-                    suffixIcon: Icons.lock,
-                    hinttext: "+91 12345 12345",
-                    readOnly: true,
-                  ),
+                      controller: _password,
+                      suffixIcon: Icons.lock,
+                      hinttext: "+91 12345 12345",
+                      readOnly: true),
                   Gap(10),
                   Text(
                     LanguageConstants.email.tr,
@@ -125,10 +116,9 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
                             : styles.appcolors.black50),
                   ),
                   Textfieldwidget(
-                    controller: _email,
-                    // validator: EmailValidator(),
-                    hinttext: LanguageConstants.Mail.tr,
-                  ),
+                      controller: _email,
+                      // validator: EmailValidator(),
+                      hinttext: LanguageConstants.Mail.tr),
                   Gap(20),
                   // Showdatepickerwidget(
                   //   controller: _birthDateController,
@@ -142,8 +132,9 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
             Gap(15),
             Primarybtn(
               name: LanguageConstants.register.tr,
-              onPressed: () {
+              onPressed: () async {
                 if (_globalKey.currentState!.validate()) {
+                  // ---------USER-------------
                   userController.addUser(
                     name: _nameController.text.trim(),
                     email: _email.text.trim(),

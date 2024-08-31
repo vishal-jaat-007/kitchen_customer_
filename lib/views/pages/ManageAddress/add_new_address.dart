@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -23,7 +24,12 @@ class AddNewAddress extends StatefulWidget {
 }
 
 class _AddNewAddressState extends State<AddNewAddress> {
+  final firestore = FirebaseFirestore.instance.collection("Customer");
   Completer<GoogleMapController> _controller = Completer();
+  TextEditingController _houseno = TextEditingController();
+  TextEditingController _addresstitle = TextEditingController();
+  TextEditingController _contactname = TextEditingController();
+  TextEditingController _phonenumber = TextEditingController();
 
   static const LatLng _center = const LatLng(29.1492, 75.7217);
 
@@ -49,10 +55,8 @@ class _AddNewAddressState extends State<AddNewAddress> {
         // This marker id can be anything that uniquely identifies each marker.
         markerId: MarkerId(_lastMapPosition.toString()),
         position: _lastMapPosition,
-        infoWindow: InfoWindow(
-          title: 'Really cool place',
-          snippet: '5 Star Rating',
-        ),
+        infoWindow:
+            InfoWindow(title: 'Really cool place', snippet: '5 Star Rating'),
         icon: BitmapDescriptor.defaultMarker,
       ));
     });
@@ -70,130 +74,106 @@ class _AddNewAddressState extends State<AddNewAddress> {
   Widget build(BuildContext context) {
     final controller = Get.find<ThemeController>();
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Get.back(canPop: true);
-                    },
-                    icon: Icon(Icons.arrow_back),
-                  ),
-                  Expanded(
-                    child: SearchTextField(
-                      tittle: LanguageConstants
-                          .search_for_available_service_area.tr,
-                      shadow: true,
-                      ontap: () {},
-                      readOnly: false,
-                    ),
-                  ),
-                ],
+        body: SafeArea(
+            child: ListView(children: [
+      Padding(
+          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+          child: Row(children: [
+            IconButton(
+                onPressed: () {
+                  Get.back(canPop: true);
+                },
+                icon: Icon(Icons.arrow_back)),
+            Expanded(
+                child: SearchTextField(
+                    tittle:
+                        LanguageConstants.search_for_available_service_area.tr,
+                    shadow: true,
+                    ontap: () {},
+                    readOnly: false))
+          ])),
+      Container(
+          height: Appservices.getScreenHeight() / 2,
+          child: GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 18.0,
               ),
-            ),
-            Container(
-              height: Appservices.getScreenHeight() / 2,
-              child: GoogleMap(
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 18.0,
-                ),
-                mapType: _currentMapType,
-                markers: _markers,
-                onCameraMove: _onCameraMove,
-              ),
-            ),
-            Containerwidget(
-                // shadow: false,
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${LanguageConstants.house_no.tr} / ${LanguageConstants.building_name.tr}",
-                  style: styles.textthme.fs12_regular.copyWith(
-                      color: controller.isDarkMode()
-                          ? styles.appcolors.whitecolor
-                          : styles.appcolors.black50),
-                ),
-                Gap(5),
-                Textfieldwidget(
-                  hinttext: LanguageConstants.house_no.tr,
-                ),
-                Gap(10),
-                Text(
-                  LanguageConstants.address_title.tr,
-                  style: styles.textthme.fs12_regular.copyWith(
-                      color: controller.isDarkMode()
-                          ? styles.appcolors.whitecolor
-                          : styles.appcolors.black50),
-                ),
-                Gap(5),
-                Textfieldwidget(
-                  hinttext: LanguageConstants.enter_house_no.tr,
-                ),
-                Row(
+              mapType: _currentMapType,
+              markers: _markers,
+              onCameraMove: _onCameraMove)),
+      Containerwidget(
+          // shadow: false,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+            "${LanguageConstants.house_no.tr} / ${LanguageConstants.building_name.tr}",
+            style: styles.textthme.fs12_regular.copyWith(
+                color: controller.isDarkMode()
+                    ? styles.appcolors.whitecolor
+                    : styles.appcolors.black50)),
+        Gap(5),
+        Textfieldwidget(
+            controller: _houseno, hinttext: LanguageConstants.house_no.tr),
+        Gap(10),
+        Text(LanguageConstants.address_title.tr,
+            style: styles.textthme.fs12_regular.copyWith(
+                color: controller.isDarkMode()
+                    ? styles.appcolors.whitecolor
+                    : styles.appcolors.black50)),
+        Gap(5),
+        Textfieldwidget(
+            controller: _addresstitle,
+            hinttext: LanguageConstants.enter_house_no.tr),
+        Row(children: [
+          Gap(5),
+          Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Gap(5),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Gap(5),
-                          Text(
-                            LanguageConstants.contact_name.tr,
-                            style: styles.textthme.fs12_regular.copyWith(
-                                color: controller.isDarkMode()
-                                    ? styles.appcolors.whitecolor
-                                    : styles.appcolors.black50),
-                          ),
-                          Gap(5),
-                          Textfieldwidget(),
-                        ],
-                      ),
-                    ),
-                    Gap(5),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Gap(5),
-                          Text(
-                            LanguageConstants.contact_number.tr,
-                            style: styles.textthme.fs12_regular.copyWith(
-                                color: controller.isDarkMode()
-                                    ? styles.appcolors.whitecolor
-                                    : styles.appcolors.black50),
-                          ),
-                          Gap(5),
-                          Textfieldwidget(
-                            hinttext: "+91",
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Gap(10),
-                Row(
+                Gap(5),
+                Text(LanguageConstants.contact_name.tr,
+                    style: styles.textthme.fs12_regular.copyWith(
+                        color: controller.isDarkMode()
+                            ? styles.appcolors.whitecolor
+                            : styles.appcolors.black50)),
+                Gap(5),
+                Textfieldwidget(controller: _contactname)
+              ])),
+          Gap(5),
+          Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Primarybtn(
-                        isExpanded: true,
-                        name: LanguageConstants.saved_address.tr,
-                        onPressed: () {
-                          Get.toNamed(Routes.Manageaddress);
-                        }),
-                  ],
-                )
-              ],
-            ))
-          ],
-        ),
-      ),
-    );
+                Gap(5),
+                Text(LanguageConstants.contact_number.tr,
+                    style: styles.textthme.fs12_regular.copyWith(
+                        color: controller.isDarkMode()
+                            ? styles.appcolors.whitecolor
+                            : styles.appcolors.black50)),
+                Gap(5),
+                Textfieldwidget(hinttext: "+91", controller: _phonenumber)
+              ]))
+        ]),
+        Gap(10),
+        Row(children: [
+          Primarybtn(
+              isExpanded: true,
+              name: LanguageConstants.saved_address.tr,
+              onPressed: () async {
+                String id = DateTime.now().millisecondsSinceEpoch.toString();
+                firestore.doc().collection("add adress").doc(id).set({
+                  "id": id,
+                  "houseno": _houseno.text.toString(),
+                  "addresstitle": _addresstitle.text.toString(),
+                  "contactname": _contactname.text.toString(),
+                  "phonenumber": _phonenumber.text.toString(),
+                });
+                Get.toNamed(Routes.Manageaddress);
+              })
+        ])
+      ]))
+    ])));
   }
 }
