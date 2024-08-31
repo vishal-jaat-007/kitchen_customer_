@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +8,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tiffin_service_customer/resources/config/app_services.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
+import 'package:tiffin_service_customer/resources/utils/Apis/apis.dart';
 import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controller/theme_controller.dart';
+import 'package:tiffin_service_customer/view_model/controllers/user_controller.dart';
 import 'package:tiffin_service_customer/view_model/model/categeroy_model.dart';
 import 'package:tiffin_service_customer/views/components/button/Primarybtn.dart';
 import 'package:tiffin_service_customer/views/components/container/containerwidget.dart';
@@ -31,7 +32,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
   TextEditingController _contactname = TextEditingController();
   TextEditingController _phonenumber = TextEditingController();
 
-  static const LatLng _center = const LatLng(29.1492, 75.7217);
+  static const LatLng _center = LatLng(29.1492, 75.7217);
 
   final Set<Marker> _markers = {};
 
@@ -39,35 +40,46 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
   MapType _currentMapType = MapType.normal;
 
-  // ignore: unused_element
-  void _onMapTypeButtonPressed() {
-    setState(() {
-      _currentMapType = _currentMapType == MapType.normal
-          ? MapType.satellite
-          : MapType.normal;
-    });
-  }
+  final TextEditingController _houseNoController = TextEditingController();
+  final TextEditingController _addressTitleController = TextEditingController();
+  final TextEditingController _contactNameController = TextEditingController();
+  final TextEditingController _contactNumberController =
+      TextEditingController();
 
-  // ignore: unused_element
-  void _onAddMarkerButtonPressed() {
-    setState(() {
-      _markers.add(Marker(
-        // This marker id can be anything that uniquely identifies each marker.
-        markerId: MarkerId(_lastMapPosition.toString()),
-        position: _lastMapPosition,
-        infoWindow:
-            InfoWindow(title: 'Really cool place', snippet: '5 Star Rating'),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
-    });
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
   }
 
   void _onCameraMove(CameraPosition position) {
     _lastMapPosition = position.target;
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
+  void _saveAddress() async {
+    if (_houseNoController.text.isNotEmpty &&
+        _addressTitleController.text.isNotEmpty &&
+        _contactNameController.text.isNotEmpty &&
+        _contactNumberController.text.isNotEmpty) {
+      try {
+        await Apis.addAddress(
+          userId: Get.find<UserController>()
+              .user
+              .uid, 
+          houseNo: _houseNoController.text,
+          addressTitle: _addressTitleController.text,
+          contactName: _contactNameController.text,
+          contactNumber: _contactNumberController.text,
+          latitude: _lastMapPosition.latitude,
+          longitude: _lastMapPosition.longitude,
+        );
+
+        Get.toNamed(Routes.Manageaddress);  
+        Get.snackbar('Success', 'Address saved successfully');
+      } catch (e) {
+        Get.snackbar('Error', 'Failed to save address');
+      }
+    } else {
+      Get.snackbar('Error', 'All fields are required');
+    }
   }
 
   @override
@@ -100,80 +112,112 @@ class _AddNewAddressState extends State<AddNewAddress> {
                 target: _center,
                 zoom: 18.0,
               ),
-              mapType: _currentMapType,
-              markers: _markers,
-              onCameraMove: _onCameraMove)),
-      Containerwidget(
-          // shadow: false,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-            "${LanguageConstants.house_no.tr} / ${LanguageConstants.building_name.tr}",
-            style: styles.textthme.fs12_regular.copyWith(
-                color: controller.isDarkMode()
-                    ? styles.appcolors.whitecolor
-                    : styles.appcolors.black50)),
-        Gap(5),
-        Textfieldwidget(
-            controller: _houseno, hinttext: LanguageConstants.house_no.tr),
-        Gap(10),
-        Text(LanguageConstants.address_title.tr,
-            style: styles.textthme.fs12_regular.copyWith(
-                color: controller.isDarkMode()
-                    ? styles.appcolors.whitecolor
-                    : styles.appcolors.black50)),
-        Gap(5),
-        Textfieldwidget(
-            controller: _addresstitle,
-            hinttext: LanguageConstants.enter_house_no.tr),
-        Row(children: [
-          Gap(5),
-          Expanded(
+            ),),
+            Container(
+              height: Appservices.getScreenHeight() / 2,
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 18.0,
+                ),
+                mapType: _currentMapType,
+                markers: _markers,
+                onCameraMove: _onCameraMove,
+              ),
+            ),
+            Containerwidget(
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                Gap(5),
-                Text(LanguageConstants.contact_name.tr,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${LanguageConstants.house_no.tr} / ${LanguageConstants.building_name.tr}",
                     style: styles.textthme.fs12_regular.copyWith(
-                        color: controller.isDarkMode()
-                            ? styles.appcolors.whitecolor
-                            : styles.appcolors.black50)),
-                Gap(5),
-                Textfieldwidget(controller: _contactname)
-              ])),
-          Gap(5),
-          Expanded(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                Gap(5),
-                Text(LanguageConstants.contact_number.tr,
+                      color: controller.isDarkMode()
+                          ? styles.appcolors.whitecolor
+                          : styles.appcolors.black50,
+                    ),
+                  ),
+                  Gap(5),
+                  Textfieldwidget(
+                    controller: _houseNoController,
+                    hinttext: LanguageConstants.house_no.tr,
+                  ),
+                  Gap(10),
+                  Text(
+                    LanguageConstants.address_title.tr,
                     style: styles.textthme.fs12_regular.copyWith(
-                        color: controller.isDarkMode()
-                            ? styles.appcolors.whitecolor
-                            : styles.appcolors.black50)),
-                Gap(5),
-                Textfieldwidget(hinttext: "+91", controller: _phonenumber)
-              ]))
-        ]),
-        Gap(10),
-        Row(children: [
-          Primarybtn(
-              isExpanded: true,
-              name: LanguageConstants.saved_address.tr,
-              onPressed: () async {
-                String id = DateTime.now().millisecondsSinceEpoch.toString();
-                firestore.doc().collection("add adress").doc(id).set({
-                  "id": id,
-                  "houseno": _houseno.text.toString(),
-                  "addresstitle": _addresstitle.text.toString(),
-                  "contactname": _contactname.text.toString(),
-                  "phonenumber": _phonenumber.text.toString(),
-                });
-                Get.toNamed(Routes.Manageaddress);
-              })
-        ])
-      ]))
-    ])));
+                      color: controller.isDarkMode()
+                          ? styles.appcolors.whitecolor
+                          : styles.appcolors.black50,
+                    ),
+                  ),
+                  Gap(5),
+                  Textfieldwidget(
+                    controller: _addressTitleController,
+                    hinttext: LanguageConstants.enter_house_no.tr,
+                  ),
+                  Gap(10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              LanguageConstants.contact_name.tr,
+                              style: styles.textthme.fs12_regular.copyWith(
+                                color: controller.isDarkMode()
+                                    ? styles.appcolors.whitecolor
+                                    : styles.appcolors.black50,
+                              ),
+                            ),
+                            Gap(5),
+                            Textfieldwidget(
+                              controller: _contactNameController,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Gap(10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              LanguageConstants.contact_number.tr,
+                              style: styles.textthme.fs12_regular.copyWith(
+                                color: controller.isDarkMode()
+                                    ? styles.appcolors.whitecolor
+                                    : styles.appcolors.black50,
+                              ),
+                            ),
+                            Gap(5),
+                            Textfieldwidget(
+                              controller: _contactNumberController,
+                              hinttext: "+91",
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Gap(10),
+                  Row(
+                    children: [
+                      Primarybtn(
+                        isExpanded: true,
+                        name: LanguageConstants.saved_address.tr,
+                        onPressed: _saveAddress,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

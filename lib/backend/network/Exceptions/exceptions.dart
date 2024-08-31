@@ -1,6 +1,6 @@
-import 'dart:convert';
+import 'dart:io';
 
-import 'package:http/http.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AppExceptions {
   final String _message;
@@ -29,20 +29,28 @@ class DefaultException extends AppExceptions {
   DefaultException({required super.message})
       : super(prefix: "Something Went Wrong!");
 }
-
-GenerateResponse(Response data) {
-  switch (data.statusCode) {
+    
+String getResponse(HttpResponse response) {
+  final statusCode = response.statusCode;
+  switch (statusCode) {
     case 200 || 201:
-      final db = jsonDecode(data.body);
-      return db;
+      return "Response";
     case 500:
       throw CommunicationException(
           message: "Error During Communication! Try again");
     default:
       throw DefaultException(message: "Something Went Wrong Try again later");
+  }
+}
 
-
-      
-
+AppExceptions getResponseFirebase(FirebaseAuthException exception) {
+  final statusCode = exception.code;
+  print(statusCode);
+  switch (statusCode) {
+    case "invalid-credential":
+      return CommunicationException(
+          message: "The username or password you entered is wrong.");
+    default:
+      return DefaultException(message: "Something Went Wrong Try again later");
   }
 }

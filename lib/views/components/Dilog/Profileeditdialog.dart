@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
 import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
 import 'package:tiffin_service_customer/views/components/Button/Primarybtn.dart';
@@ -29,7 +30,7 @@ void Profileeditdialog() {
                 isExpanded: true,
                 name: LanguageConstants.Back,
                 onPressed: () {
-                  Get.back();
+                  Get.toNamed(Routes.bottomnavigationbar);
                 },
                 radius: 100)
           ])

@@ -8,6 +8,7 @@ import 'package:tiffin_service_customer/view_model/controllers/counter_controlle
 import 'package:tiffin_service_customer/view_model/controllers/food_controller.dart';
 import 'package:tiffin_service_customer/view_model/controllers/language_controller.dart';
 import 'package:tiffin_service_customer/view_model/controllers/product/product_controller.dart';
+import 'package:tiffin_service_customer/view_model/controllers/user_controller.dart';
 
 class AppBindings extends Bindings {
   @override
@@ -20,6 +21,7 @@ class AppBindings extends Bindings {
     Get.put(ChatController());
     Get.put(ProductController());
     // Get.put(FirebaseData());
+    Get.put(UserController());
     Get.put(AddonController(), permanent: true);
   }
 }

@@ -1,45 +1,59 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+class Usermodel {
+  String uid;
+  String email;
+  String username;
+  String gender;
+  String dob;
+  DateTime? createdAt;
+  String profileImage; 
 
-class firebasemodel {
-  String? id;
-  String? email;
-  String? name;
-  String? phoneNumber;
-  String? dob;
-
-  firebasemodel({
-    this.id,
-    this.name,
-    this.email,
-    this.phoneNumber,
-    this.dob,
+  Usermodel({
+    this.uid = "",
+    this.email = "",
+    this.username = "",
+    this.gender = "",
+    this.dob = "",
+    this.createdAt,
+    this.profileImage = "", 
   });
 
-  firebasemodel.fromjson(FirebaseResponseModel json)
-      : name = json.data["name"] ?? "",
-        email = json.data["email"] ?? "",
-        id = json.docId,
-        phoneNumber = json.data["phonenumber"] ?? "",
-        dob = json.data["dob"] ?? "";
+  Usermodel.fromJson(Map<String, dynamic> json, this.uid)
+      : email = json["email"] ?? "",
+        username = json["username"] ?? "",
+        gender = json["gender"] ?? "",
+        dob = json["dob"] ?? "",
+        createdAt = (json["createdAt"] != null)
+            ? DateTime.tryParse(json["createdAt"])
+            : null,
+        profileImage = json["profileImage"] ?? ""; 
 
-  Map<String, dynamic> tojson() {
-    return {
-      "id": id,
-      "name": name,
-      "email": email,
-      "phonenumber": phoneNumber,
-      "dob": dob,
-    };
+  Map<String, dynamic> tojson() => {
+        "uid": uid,
+        "email": email,
+        "username": username,
+        "gender": gender,
+        "dob": dob,
+        "createdAt": createdAt?.toIso8601String(),
+        "profileImage": profileImage, 
+      };
+
+  Usermodel copyWith({
+    String? uid,
+    String? email,
+    String? username,
+    String? gender,
+    String? dob,
+    DateTime? createdAt,
+    String? profileImage, 
+  }) {
+    return Usermodel(
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      username: username ?? this.username,
+      gender: gender ?? this.gender,
+      dob: dob ?? this.dob,
+      createdAt: createdAt ?? this.createdAt,
+      profileImage: profileImage ?? this.profileImage,
+    );
   }
-}
-
-class FirebaseResponseModel {
-  Map<String, dynamic> data;
-  String docId;
-
-  FirebaseResponseModel(this.data, this.docId);
-
-  FirebaseResponseModel.fromResponse(DocumentSnapshot snapshot)
-      : data = snapshot.data() as Map<String, dynamic>,
-        docId = snapshot.id;
 }

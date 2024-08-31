@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:tiffin_service_customer/backend/network/repo/sharedPerf.dart';
 import 'package:tiffin_service_customer/firebase_options.dart';
 import 'package:tiffin_service_customer/resources/config/prefs/prefs.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
@@ -11,7 +12,7 @@ import 'package:tiffin_service_customer/view_model/bindings/app_bindings.dart';
 
 late Size screenSize;
 Prefs preferences = Prefs.instance;
-
+SpData pref = SpData.instance;
 Future<void> main() async {
 // ...
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,10 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   WidgetsFlutterBinding.ensureInitialized();
+
   await preferences.setPreferences();
+  await pref.sharedSet();
+
   runApp(const MyApp());
 }
 
@@ -33,16 +37,17 @@ class MyApp extends StatelessWidget {
     screenSize = MediaQuery.of(context).size;
 
     return ScreenUtilInit(
-        builder: (context, child) => GetMaterialApp(
-            title: 'Flutter Demo',
-            theme: GetTheme.lightTheme,
-            darkTheme: GetTheme.dartTheme,
-            initialRoute: AppPages.intialroute,
-            getPages: AppPages.routes,
-            themeMode: ThemeMode.light,
-            translations: TranslationService(),
-            fallbackLocale: TranslationService.fallbackLocale,
-            locale: TranslationService.locale,
-            initialBinding: AppBindings()));
+          builder: (context, child) => GetMaterialApp(
+              title: 'Flutter Demo',
+              theme: GetTheme.lightTheme,
+              darkTheme: GetTheme.dartTheme,
+              initialRoute: AppPages.intialroute,
+              getPages: AppPages.routes,
+              themeMode: ThemeMode.light,
+              translations: TranslationService(),
+              fallbackLocale: TranslationService.fallbackLocale,
+              locale: TranslationService.locale,
+              initialBinding: AppBindings()));
+    
   }
 }

@@ -108,5 +108,5 @@ class UsernameValidator extends AppValidator {
       return "Username can only contain letters, numbers, underscores, periods, or hyphens";
     }
     return null;
-  }
+  }                                                                                        
 }
