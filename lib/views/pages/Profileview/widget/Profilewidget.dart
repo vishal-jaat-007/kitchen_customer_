@@ -16,6 +16,7 @@ class Profilewidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  
     SingleTonClass styles = SingleTonClass.instance;
     final controller = Get.find<ThemeController>();
     final user = Get.find<UserController>();

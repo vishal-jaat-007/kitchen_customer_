@@ -18,6 +18,7 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+          
             // Header code remains the same
             ClipPath(
               clipper: MyClipper(),
