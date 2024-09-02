@@ -125,7 +125,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
                   Text(
                     "${LanguageConstants.house_no.tr} / ${LanguageConstants.building_name.tr}",
                     style: styles.textthme.fs12_regular.copyWith(
-                      color: controller.isDarkMode()
+                      color: controller.isDarkMode() 
                           ? styles.appcolors.whitecolor
                           : styles.appcolors.black50,
                     ),
@@ -133,7 +133,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
                   Gap(5),
                   Textfieldwidget(
                     controller: _houseNoController,
-                    hinttext: LanguageConstants.house_no.tr,
+                    hinttext: LanguageConstants.house_no.tr,   
                   ),
                   Gap(10),
                   Text(
@@ -163,7 +163,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
                                     ? styles.appcolors.whitecolor
                                     : styles.appcolors.black50,
                               ),
-                            ),
+                            ), 
                             Gap(5),
                             Textfieldwidget(
                               controller: _contactNameController,

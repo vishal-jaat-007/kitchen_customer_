@@ -9,7 +9,7 @@ import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart'
 import 'package:tiffin_service_customer/resources/utils/Apis/apis.dart';
 import 'package:tiffin_service_customer/view_model/model/user/userdata.dart';
 
-class AuthRepositry extends Authentication {
+class  AuthRepositry extends Authentication {
   final _auth = FirebaseAuth.instance;
   final store = FirebaseFirestore.instance;
 

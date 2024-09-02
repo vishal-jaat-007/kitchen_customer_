@@ -104,7 +104,7 @@ class _ProfileeditState extends State<Profileedit> {
                           setState(() {
                             imageFile = result;
                             _userController.updateProfileImage(result);
-                          });
+                          });    
                         }
                       },
                       child: Container(
