@@ -35,6 +35,7 @@ class _ProfileeditState extends State<Profileedit> {
   late final TextEditingController _birthDateController;
   late final TextEditingController _genderController;
   File? imageFile;
+  bool loading = false;
 
   @override
   void initState() {
@@ -167,11 +168,14 @@ class _ProfileeditState extends State<Profileedit> {
               Row(
                 children: [
                   Primarybtn(
+                    loading: loading,
                     isExpanded: true,
                     name: LanguageConstants.update_profile.tr,
                     onPressed: () async {
                       if (_globalKey.currentState!.validate()) {
-                        _userController.setLoading(true);
+                        setState(() {
+                          loading = true;
+                        });
                         try {
                           await Apis.updateUser(
                             id: _userController.user.uid,
@@ -197,7 +201,9 @@ class _ProfileeditState extends State<Profileedit> {
                           Get.snackbar('Error',
                               'Failed to update profile. Please try again.');
                         } finally {
-                          _userController.setLoading(false);
+                          setState(() {
+                            loading = false;
+                          });
                         }
                       }
                     },

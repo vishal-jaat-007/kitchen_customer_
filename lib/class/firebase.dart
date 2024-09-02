@@ -93,4 +93,27 @@ class FirebaseResponseHandler {
     }
     return null;
   }
+
+
+   Future<void> deleteData(dynamic path) async {
+    try {
+      if (path is DocumentReference) {
+        await path.delete();
+      } else if (path is CollectionReference) {
+        final snapshot = await path.get();
+        final batch = _firestore.batch();
+
+        for (var doc in snapshot.docs) {
+          batch.delete(doc.reference);
+        }
+
+        await batch.commit();
+      } else {
+        throw "Invalid Request";
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 }

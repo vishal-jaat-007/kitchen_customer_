@@ -39,18 +39,27 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     SingleTonClass styles = SingleTonClass.instance;
-    // final db = Get.find<FirebaseData>();
 
     return Scaffold(
-        body: Form(
-            key: _globalKey,
-            child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: ListView(children: [
-                  Gap(80),
-                  Column(children: [
-                    Image.asset(styles.appimg.dabbawala,
-                        height: Appservices.getScreenHeight() * 0.25),
+      body: Form(
+        key: _globalKey,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: ListView(
+            children: [
+              Gap(80),
+              Column(
+                children: [
+                  Image.asset(
+                    styles.appimg.dabbawala,
+                    height: Appservices.getScreenHeight() * 0.25,
+                  ),
+                  Gap(10),
+                  Row(children: [
+                    Expanded(child: Divider()),
+                    Gap(15),
+                    Text("${LanguageConstants.signUp.tr}",
+                        style: styles.textthme.fs16_regular),
                     Gap(10),
                     Expanded(child: Divider())
                   ]),
@@ -149,15 +158,10 @@ class _SignupState extends State<Signup> {
                   Gap(22),
                 ],
               )
-            
+            ],
           ),
         ),
-      
+      ),
     );
   }
-
-  // firebasemodel generateData() {
-  //   return firebasemodel(
-  //       name: _username.text, email: _email.text, phoneNumber: _password.text);
-  // }
 }

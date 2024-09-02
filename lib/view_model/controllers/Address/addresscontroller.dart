@@ -1,29 +1,34 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/material.dart';
-// import 'package:tiffin_service_customer/view_model/controllers/auth/sharedpref.dart';
-// import 'package:tiffin_service_customer/view_model/model/user/userdata.dart';
+import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tiffin_service_customer/class/firebase.dart';
+import 'package:tiffin_service_customer/view_model/model/address/address_model.dart';
 
-// class Addresscontroller extends ChangeNotifier {
-//     final _firestore = FirebaseFirestore.instance;
-//   dynamic _address;
-//   addressmodel get addressdata => _address;
-//   setaddressdata(addressmodel model) {
-//     _address = model;
-//     notifyListeners();
-//   }
-//   // -----
-//   Future Addaddress(Map<String,dynamic> data)async{
-//     final model= addressmodel.fromojson(data);
-//   try {
+class AddressController extends GetxController {
+  final _firebaseHandler = FirebaseResponseHandler();
+  final _firestore = FirebaseFirestore.instance;
 
-//     final String? addressid= model.id;
-//     await  _firestore.collection("address").doc(addressid);
-//       _address = addressdata.copywith(id: addressid);
-//     Sharedpref.setpref("address", addressid!);
-//   } catch (e) {
-    
-//   }
+  RxList<AddressModel> addresses = <AddressModel>[].obs;
 
-//   }
-  
-// }
+  Future<void> addAddress(Map<String, dynamic> data) async {
+    try {
+      final db = await _firebaseHandler.postData(
+          _firestore.collection("Address"), data);
+
+      final address = AddressModel.fromFirestore(db as FirebaseResponseModel);
+      print(address.contactName);
+      addresses.add(address);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future deleteaddress({required String uid}) async {
+    try {
+      final delete = await _firebaseHandler
+          .deleteData(_firestore.collection("Address").doc(uid).delete());
+      return delete;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+}

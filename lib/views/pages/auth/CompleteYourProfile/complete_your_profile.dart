@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -33,6 +32,7 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
   final TextEditingController _birthDateController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
   TextEditingController _phonenumberController = TextEditingController();
+  bool loading = false;
 
   File? imagefile;
   late String userId;
@@ -159,9 +159,17 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
               ),
               Gap(15),
               Primarybtn(
+                loading: loading,
                 name: LanguageConstants.register.tr,
                 onPressed: () async {
                   if (_globalKey.currentState!.validate()) {
+                    setState(() {
+                      loading = true;
+                    });
+                    setState(() {
+                      loading = true;
+                    });
+
                     try {
                       await Apis.updateUser(
                         id: userId,
@@ -174,6 +182,10 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
                       Get.toNamed(Routes.bottomnavigationbar);
                     } catch (e) {
                       print(e.toString());
+                    } finally {
+                      setState(() {
+                        loading = false;
+                      });
                     }
                   }
                 },

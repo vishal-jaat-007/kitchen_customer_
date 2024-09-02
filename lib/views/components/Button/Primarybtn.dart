@@ -50,10 +50,7 @@ class Primarybtn extends StatelessWidget {
           onPressed();
         },
         child: loading
-            ? CircularProgressIndicator(
-                color: styles.appcolors.whitecolor,
-                strokeWidth: 5,
-              )
+            ? CircularProgressIndicator(color: styles.appcolors.whitecolor)
             : Text(name,
                 style: styles.textthme.fs16_regular.copyWith(
                     color: foregroundColor == null

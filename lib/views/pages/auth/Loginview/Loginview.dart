@@ -28,24 +28,35 @@ class _LoginviewState extends State<Loginview> {
 
   @override
   void dispose() {
-    // _email.dispose();
-    // _password.dispose();
+    _email.dispose();
+    _password.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     SingleTonClass styles = SingleTonClass.instance;
+
     return Scaffold(
-        body: Form(
-            key: _globalKey,
-            child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: ListView(children: [
-                  Gap(80),
-                  Column(children: [
-                    Image.asset(styles.appimg.dabbawala,
-                        height: Appservices.getScreenHeight() * 0.33),
+      body: Form(
+        key: _globalKey,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: ListView(
+            children: [
+              Gap(80),
+              Column(
+                children: [
+                  Image.asset(
+                    styles.appimg.dabbawala,
+                    height: Appservices.getScreenHeight() * 0.33,
+                  ),
+                  Gap(10),
+                  Row(children: [
+                    Expanded(child: Divider()),
+                    Gap(15),
+                    Text("${LanguageConstants.logIn.tr}",
+                        style: styles.textthme.fs16_regular),
                     Gap(10),
                     Expanded(child: Divider())
                   ]),
@@ -145,8 +156,8 @@ class _LoginviewState extends State<Loginview> {
                   Gap(22),
                 ],
               ),
-            
-          
+            ],
+          ),
         ),
       ),
     );

@@ -1,16 +1,18 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tiffin_service_customer/class/firebase.dart';
 import 'package:tiffin_service_customer/resources/config/app_services.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
-import 'package:tiffin_service_customer/resources/utils/Apis/apis.dart';
+import 'package:tiffin_service_customer/view_model/controllers/Address/addresscontroller.dart';
 import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controller/theme_controller.dart';
-import 'package:tiffin_service_customer/view_model/controllers/user_controller.dart';
+import 'package:tiffin_service_customer/view_model/model/address/address_model.dart';
 import 'package:tiffin_service_customer/view_model/model/categeroy_model.dart';
 import 'package:tiffin_service_customer/views/components/button/Primarybtn.dart';
 import 'package:tiffin_service_customer/views/components/container/containerwidget.dart';
@@ -25,19 +27,10 @@ class AddNewAddress extends StatefulWidget {
 }
 
 class _AddNewAddressState extends State<AddNewAddress> {
-  final firestore = FirebaseFirestore.instance.collection("Customer");
   Completer<GoogleMapController> _controller = Completer();
-  TextEditingController _houseno = TextEditingController();
-  TextEditingController _addresstitle = TextEditingController();
-  TextEditingController _contactname = TextEditingController();
-  TextEditingController _phonenumber = TextEditingController();
-
   static const LatLng _center = LatLng(29.1492, 75.7217);
-
   final Set<Marker> _markers = {};
-
   LatLng _lastMapPosition = _center;
-
   MapType _currentMapType = MapType.normal;
 
   final TextEditingController _houseNoController = TextEditingController();
@@ -54,29 +47,25 @@ class _AddNewAddressState extends State<AddNewAddress> {
     _lastMapPosition = position.target;
   }
 
-  void _saveAddress() async {
+  void _createAddress() async {
+    // Validate the inputs before proceeding
     if (_houseNoController.text.isNotEmpty &&
         _addressTitleController.text.isNotEmpty &&
         _contactNameController.text.isNotEmpty &&
         _contactNumberController.text.isNotEmpty) {
-      try {
-        await Apis.addAddress(
-          userId: Get.find<UserController>()
-              .user
-              .uid, 
-          houseNo: _houseNoController.text,
-          addressTitle: _addressTitleController.text,
-          contactName: _contactNameController.text,
-          contactNumber: _contactNumberController.text,
-          latitude: _lastMapPosition.latitude,
-          longitude: _lastMapPosition.longitude,
-        );
+      final addressModel = AddressModel(
+        addresstitle: _addressTitleController.text,
+        contactName: _contactNameController.text,
+        houseNo: _houseNoController.text,
+        contactNumber: _contactNumberController.text,
+      );
 
-        Get.toNamed(Routes.Manageaddress);  
-        Get.snackbar('Success', 'Address saved successfully');
-      } catch (e) {
-        Get.snackbar('Error', 'Failed to save address');
-      }
+      final addressController = Get.find<AddressController>();
+
+      await addressController.addAddress(addressModel.toMap());
+
+      Get.toNamed(Routes.Manageaddress);
+      Get.snackbar('Success', 'Address saved successfully');
     } else {
       Get.snackbar('Error', 'All fields are required');
     }
@@ -84,35 +73,35 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ThemeController>();
+    final addressController = Get.find<AddressController>();
+    final themeController = Get.find<ThemeController>();
+
     return Scaffold(
-        body: SafeArea(
-            child: ListView(children: [
-      Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-          child: Row(children: [
-            IconButton(
-                onPressed: () {
-                  Get.back(canPop: true);
-                },
-                icon: Icon(Icons.arrow_back)),
-            Expanded(
-                child: SearchTextField(
-                    tittle:
-                        LanguageConstants.search_for_available_service_area.tr,
-                    shadow: true,
-                    ontap: () {},
-                    readOnly: false))
-          ])),
-      Container(
-          height: Appservices.getScreenHeight() / 2,
-          child: GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 18.0,
+      body: SafeArea(
+        child: ListView(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Get.back(canPop: true);
+                    },
+                    icon: Icon(Icons.arrow_back),
+                  ),
+                  Expanded(
+                    child: SearchTextField(
+                      tittle: LanguageConstants
+                          .search_for_available_service_area.tr,
+                      shadow: true,
+                      ontap: () {},
+                      readOnly: false,
+                    ),
+                  ),
+                ],
               ),
-            ),),
+            ),
             Container(
               height: Appservices.getScreenHeight() / 2,
               child: GoogleMap(
@@ -130,74 +119,27 @@ class _AddNewAddressState extends State<AddNewAddress> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "${LanguageConstants.house_no.tr} / ${LanguageConstants.building_name.tr}",
-                    style: styles.textthme.fs12_regular.copyWith(
-                      color: controller.isDarkMode()
-                          ? styles.appcolors.whitecolor
-                          : styles.appcolors.black50,
-                    ),
-                  ),
-                  Gap(5),
                   Textfieldwidget(
-                    controller: _houseNoController,
-                    hinttext: LanguageConstants.house_no.tr,
-                  ),
+                      controller: _houseNoController,
+                      hinttext:
+                          "${LanguageConstants.house_no.tr} / ${LanguageConstants.building_name.tr}"),
                   Gap(10),
-                  Text(
-                    LanguageConstants.address_title.tr,
-                    style: styles.textthme.fs12_regular.copyWith(
-                      color: controller.isDarkMode()
-                          ? styles.appcolors.whitecolor
-                          : styles.appcolors.black50,
-                    ),
-                  ),
-                  Gap(5),
                   Textfieldwidget(
-                    controller: _addressTitleController,
-                    hinttext: LanguageConstants.enter_house_no.tr,
-                  ),
+                      controller: _addressTitleController,
+                      hinttext: LanguageConstants.address_title.tr),
                   Gap(10),
                   Row(
                     children: [
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              LanguageConstants.contact_name.tr,
-                              style: styles.textthme.fs12_regular.copyWith(
-                                color: controller.isDarkMode()
-                                    ? styles.appcolors.whitecolor
-                                    : styles.appcolors.black50,
-                              ),
-                            ),
-                            Gap(5),
-                            Textfieldwidget(
-                              controller: _contactNameController,
-                            ),
-                          ],
-                        ),
+                        child: Textfieldwidget(
+                            controller: _contactNameController,
+                            hinttext: LanguageConstants.contact_name.tr),
                       ),
                       Gap(10),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              LanguageConstants.contact_number.tr,
-                              style: styles.textthme.fs12_regular.copyWith(
-                                color: controller.isDarkMode()
-                                    ? styles.appcolors.whitecolor
-                                    : styles.appcolors.black50,
-                              ),
-                            ),
-                            Gap(5),
-                            Textfieldwidget(
-                              controller: _contactNumberController,
-                              hinttext: "+91",
-                            ),
-                          ],
+                        child: Textfieldwidget(
+                          controller: _contactNumberController,
+                          hinttext: LanguageConstants.contact_number.tr,
                         ),
                       ),
                     ],
@@ -208,7 +150,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
                       Primarybtn(
                         isExpanded: true,
                         name: LanguageConstants.saved_address.tr,
-                        onPressed: _saveAddress,
+                        onPressed: _createAddress,
                       ),
                     ],
                   ),

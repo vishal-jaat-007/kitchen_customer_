@@ -2,12 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tiffin_service_customer/view_model/model/models.dart';
 import 'package:tiffin_service_customer/view_model/model/product_model.dart';
 
-
 enum response { ADD, SET, UPDATE }
 
 class FirebaseHandler {
   // ---------------------
   // --------------GET COLLECTION--------
+  Future<FirebaseResponseModel?> getdata(dynamic path) async {
+    dynamic response;
+    try {
+      if (path is CollectionReference) {
+        response = await getcollection(path);
+      } else if (path is DocumentReference) {
+        response = await getdocument(path);
+      } else {
+        response = await getquery(path);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   Future<List<FirebaseResponseModel>?> getcollection(
       CollectionReference ref) async {
