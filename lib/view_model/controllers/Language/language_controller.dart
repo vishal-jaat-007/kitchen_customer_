@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:tiffin_service_customer/main.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_service.dart';
-import 'package:tiffin_service_customer/view_model/model/language_model.dart';
+import 'package:tiffin_service_customer/view_model/model/language/language_model.dart';
 
 class LanguageController extends GetxController {
   LanguageController() {

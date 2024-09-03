@@ -8,7 +8,7 @@ import 'package:tiffin_service_customer/resources/config/app_services.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
 import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
-import 'package:tiffin_service_customer/view_model/model/user/userdata.dart';
+import 'package:tiffin_service_customer/view_model/model/auth/UserModel.dart';
 import 'package:tiffin_service_customer/views/components/Button/Primarybtn.dart';
 import 'package:tiffin_service_customer/views/components/textfilled/Textfield.dart';
 import 'package:tiffin_service_customer/views/components/textrich/textrich_widget.dart';

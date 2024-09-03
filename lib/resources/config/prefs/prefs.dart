@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tiffin_service_customer/view_model/model/Theme/theme_model.dart';
-import 'package:tiffin_service_customer/view_model/model/language_model.dart';
+import 'package:tiffin_service_customer/view_model/model/language/language_model.dart';
 
 class Prefs {
   late SharedPreferences _prefs;

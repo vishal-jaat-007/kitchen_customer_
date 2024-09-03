@@ -6,7 +6,7 @@ import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart'
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
 import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
 import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controller/theme_controller.dart';
-import 'package:tiffin_service_customer/view_model/controllers/user_controller.dart';
+import 'package:tiffin_service_customer/view_model/controllers/auth/user_controller.dart';
 import 'package:tiffin_service_customer/views/components/container/containerwidget.dart';
 import 'package:tiffin_service_customer/views/components/Button/Primarybtn.dart';
 import 'package:gap/gap.dart';

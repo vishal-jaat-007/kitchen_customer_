@@ -1,10 +1,11 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:tiffin_service_customer/backend/network/repo/auth_repositry.dart';
 import 'package:tiffin_service_customer/backend/network/repo/sharedPerf.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
-import 'package:tiffin_service_customer/view_model/controllers/user_controller.dart';
-import 'package:tiffin_service_customer/view_model/model/user/userdata.dart';
+import 'package:tiffin_service_customer/view_model/controllers/auth/user_controller.dart';
+import 'package:tiffin_service_customer/view_model/model/auth/UserModel.dart';
 
 class AuthDataHandler {
   final _repo = AuthRepositry();

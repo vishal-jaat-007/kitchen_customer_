@@ -7,8 +7,6 @@ class Onboardingscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SingleTonClass styles = SingleTonClass.instance;
     final controller = Get.find<ThemeController>();
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    final user = _auth.currentUser;
 
     return Scaffold(
       body: Container(
@@ -60,11 +58,7 @@ class Onboardingscreen extends StatelessWidget {
                     Primarybtn(
                         name: LanguageConstants.getStarted.tr,
                         onPressed: () {
-                          if (user != null) {
-                            Get.toNamed(Routes.bottomnavigationbar);
-                          } else {
-                            Get.toNamed(Routes.Loginview);
-                          }
+                          AuthRepositry().Relogin();
                         },
                         isExpanded: true)
                   ]),

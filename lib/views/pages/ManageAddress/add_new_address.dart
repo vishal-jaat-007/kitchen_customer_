@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -107,35 +106,27 @@ class _AddNewAddressState extends State<AddNewAddress> {
         child: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-              child: Row(
-                children: [
+                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+                child: Row(children: [
                   IconButton(
-                    onPressed: () {
-                      Get.back(canPop: true);
-                    },
-                    icon: Icon(Icons.arrow_back),
-                  ),
+                      onPressed: () {
+                        Get.back(canPop: true);
+                      },
+                      icon: Icon(Icons.arrow_back)),
                   Expanded(
-                    child: SearchTextField(
-                      tittle: LanguageConstants
-                          .search_for_available_service_area.tr,
-                      shadow: true,
-                      ontap: () {},
-                      readOnly: false,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                      child: SearchTextField(
+                          tittle: LanguageConstants
+                              .search_for_available_service_area.tr,
+                          shadow: true,
+                          ontap: () {},
+                          readOnly: false))
+                ])),
             Container(
               height: Appservices.getScreenHeight() / 2,
               child: GoogleMap(
                 onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 18.0,
-                ),
+                initialCameraPosition:
+                    CameraPosition(target: _center, zoom: 18.0),
                 mapType: _currentMapType,
                 markers: _markers,
                 onCameraMove: _onCameraMove,

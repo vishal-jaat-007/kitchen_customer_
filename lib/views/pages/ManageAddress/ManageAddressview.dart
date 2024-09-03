@@ -38,6 +38,7 @@ class _ManageaddressState extends State<Manageaddress> {
   @override
   Widget build(BuildContext context) {
     final addressController = Get.find<AddressController>();
+    final addresscontroller = Get.find<AddressController>();
 
     return Scaffold(
       appBar: PrimaryAppBar(

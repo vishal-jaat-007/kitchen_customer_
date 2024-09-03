@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tiffin_service_customer/view_model/model/models.dart';
+import 'package:flutter/foundation.dart';
+import 'package:tiffin_service_customer/view_model/model/firebase/firebaseResponsemode.dart';
 
 class AddressModel {
   String? id;
@@ -65,3 +66,7 @@ class AddressModel {
     );
   }
 }
+
+
+
+

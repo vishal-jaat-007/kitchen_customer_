@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:tiffin_service_customer/resources/utils/Apis/order_api.dart';
-import 'package:tiffin_service_customer/view_model/controllers/user_controller.dart';
+import 'package:tiffin_service_customer/view_model/controllers/auth/user_controller.dart';
 
 class OrderController extends GetxController {
   final UserController _userController = Get.find<UserController>();
