@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -48,8 +47,8 @@ class _ProfileeditState extends State<Profileedit> {
     _birthDateController =
         TextEditingController(text: _userController.user.dob ?? '');
     _genderController =
-        TextEditingController(text: _userController.user.gender ?? '');
-
+        TextEditingController(text: _userController.user.gender ?? ''); 
+  
     if (_userController.user.profileImage.isNotEmpty) {
       if (Uri.parse(_userController.user.profileImage).isAbsolute) {
         imageFile = null;

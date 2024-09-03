@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+import 'package:tiffin_service_customer/view_model/model/models.dart';
 
 class AddressModel {
   String? id;
@@ -7,40 +7,49 @@ class AddressModel {
   String? addresstitle;
   String? contactName;
   String? contactNumber;
-  GeoPoint? location; 
+  GeoPoint? location;
 
   AddressModel({
     this.id,
     this.houseNo,
-   this.addresstitle,
+    this.addresstitle,
     this.contactName,
     this.contactNumber,
     this.location,
   });
- 
+
   // Convert AddressModel to Map for Firestore
   Map<String, dynamic> toMap() {
-    return { 
-      'houseNo': houseNo ?? "",                                                               
+    return {
+      'houseNo': houseNo ?? "",
       'addresstitle': addresstitle ?? "",
       'contactName': contactName ?? "",
       'contactNumber': contactNumber ?? "",
-      'location': location,
+      'location': location, // Firestore handles GeoPoint serialization
     };
   }
 
+  // Create AddressModel from a Map
+  factory AddressModel.fromMap(Map<String, dynamic> map, String docId) {
+    return AddressModel(
+      id: docId,
+      houseNo: map['houseNo'] ?? "",
+      addresstitle: map['addresstitle'] ?? "",
+      contactName: map['contactName'] ?? "",
+      contactNumber: map['contactNumber'] ?? "",
+      location:
+          map['location'] is GeoPoint ? map['location'] : GeoPoint(0.0, 0.0),
+    );
+  }
+
   // Create AddressModel from Firestore Document
-  AddressModel.fromFirestore(FirebaseResponseModel json)
-      : id = json.docId,
-        houseNo = json.data['houseNo'] ?? "",
-        addresstitle = json.data['addresstitle'] ?? "", 
-        contactName = json.data['contactName'] ?? "",
-        contactNumber = json.data['contactNumber'] ?? "",
-        location = json.data['location'] ?? GeoPoint(0.0, 0.0);
+  factory AddressModel.fromFirestore(FirebaseResponseModel response) {
+    return AddressModel.fromMap(response.data, response.docId);
+  }
 
   AddressModel copyWith({
     String? id,
-    String? houseNo,
+    String? houseNo,  
     String? addresstitle,
     String? contactName,
     String? contactNumber,
@@ -56,16 +65,3 @@ class AddressModel {
     );
   }
 }
-
-class FirebaseResponseModel {
-  Map<String, dynamic> data;
-  String docId;
-
-  FirebaseResponseModel(this.data, this.docId);
-
-  FirebaseResponseModel.fromResponse(QueryDocumentSnapshot snapshot)
-      : data = snapshot.data() as Map<String, dynamic>,
-        docId = snapshot.id;
-}
-
-
