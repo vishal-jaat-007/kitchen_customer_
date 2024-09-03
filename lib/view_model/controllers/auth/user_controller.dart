@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:get/get.dart';
-import 'package:tiffin_service_customer/view_model/model/user/userdata.dart';
+import 'package:tiffin_service_customer/view_model/model/auth/UserModel.dart';
 
 class UserController extends GetxController {
   var _user = Usermodel().obs;

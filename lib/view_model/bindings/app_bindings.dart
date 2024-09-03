@@ -6,9 +6,8 @@ import 'package:tiffin_service_customer/view_model/controllers/add_on_controller
 import 'package:tiffin_service_customer/view_model/controllers/chat_controller.dart';
 import 'package:tiffin_service_customer/view_model/controllers/counter_controller.dart';
 import 'package:tiffin_service_customer/view_model/controllers/food_controller.dart';
-import 'package:tiffin_service_customer/view_model/controllers/language_controller.dart';
-import 'package:tiffin_service_customer/view_model/controllers/product/product_controller.dart';
-import 'package:tiffin_service_customer/view_model/controllers/user_controller.dart';
+import 'package:tiffin_service_customer/view_model/controllers/Language/language_controller.dart';
+import 'package:tiffin_service_customer/view_model/controllers/auth/user_controller.dart';
 
 class AppBindings extends Bindings {
   @override
@@ -19,7 +18,6 @@ class AppBindings extends Bindings {
     Get.put(CounterController());
     Get.put(RadioController());
     Get.put(ChatController());
-    Get.put(ProductController());
     Get.put(UserController());
     Get.put(AddressController());
     Get.put(AddonController(), permanent: true);

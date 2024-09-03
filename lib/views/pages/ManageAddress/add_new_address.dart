@@ -1,19 +1,14 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tiffin_service_customer/class/firebase.dart';
 import 'package:tiffin_service_customer/resources/config/app_services.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
 import 'package:tiffin_service_customer/view_model/controllers/Address/addresscontroller.dart';
-import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controller/theme_controller.dart';
 import 'package:tiffin_service_customer/view_model/model/address/address_model.dart';
-import 'package:tiffin_service_customer/view_model/model/categeroy_model.dart';
 import 'package:tiffin_service_customer/views/components/button/Primarybtn.dart';
 import 'package:tiffin_service_customer/views/components/container/containerwidget.dart';
 import 'package:tiffin_service_customer/views/components/textfilled/Textfield.dart';
@@ -73,43 +68,34 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
   @override
   Widget build(BuildContext context) {
-    final addressController = Get.find<AddressController>();
-    final themeController = Get.find<ThemeController>();
+   
 
     return Scaffold(
       body: SafeArea(
         child: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-              child: Row(
-                children: [
+                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+                child: Row(children: [
                   IconButton(
-                    onPressed: () {
-                      Get.back(canPop: true);
-                    },
-                    icon: Icon(Icons.arrow_back),
-                  ),
+                      onPressed: () {
+                        Get.back(canPop: true);
+                      },
+                      icon: Icon(Icons.arrow_back)),
                   Expanded(
-                    child: SearchTextField(
-                      tittle: LanguageConstants
-                          .search_for_available_service_area.tr,
-                      shadow: true,
-                      ontap: () {},
-                      readOnly: false,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                      child: SearchTextField(
+                          tittle: LanguageConstants
+                              .search_for_available_service_area.tr,
+                          shadow: true,
+                          ontap: () {},
+                          readOnly: false))
+                ])),
             Container(
               height: Appservices.getScreenHeight() / 2,
               child: GoogleMap(
                 onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 18.0,
-                ),
+                initialCameraPosition:
+                    CameraPosition(target: _center, zoom: 18.0),
                 mapType: _currentMapType,
                 markers: _markers,
                 onCameraMove: _onCameraMove,

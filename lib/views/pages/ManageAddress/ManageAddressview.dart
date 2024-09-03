@@ -7,9 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
-import 'package:tiffin_service_customer/resources/utils/Apis/apis.dart';
 import 'package:tiffin_service_customer/view_model/controllers/Address/addresscontroller.dart';
-import 'package:tiffin_service_customer/view_model/controllers/user_controller.dart';
 import 'package:tiffin_service_customer/view_model/model/categeroy_model.dart';
 import 'package:tiffin_service_customer/views/components/Appbar/appbar.dart';
 import 'package:tiffin_service_customer/views/components/Dilog/Logoutdialog.dart';
@@ -27,7 +25,6 @@ class _ManageaddressState extends State<Manageaddress> {
   @override
   Widget build(BuildContext context) {
     final addresscontroller = Get.find<AddressController>();
-    final userController = Get.find<UserController>();
 
     return Scaffold(
         appBar: PrimaryAppBar(

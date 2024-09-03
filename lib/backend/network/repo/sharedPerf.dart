@@ -9,12 +9,12 @@ class SpData {
     _preferences = await SharedPreferences.getInstance();
   }
 
-  static setprafdata(String key, String value) async {  
+  static Future setprafdata(String key, String value) async {  
     await _preferences.setString(key, value);
   }
 
-  static getprafdata(String key) {
-    return _preferences.getString(key);
+  static String getprafdata(String key) {
+    return _preferences.getString(key).toString();
   }
 
   static removeprafdata(String key) async {

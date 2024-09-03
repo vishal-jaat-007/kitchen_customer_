@@ -14,7 +14,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.onboarding,
-      page: () => DataScreen(),
+      page: () => Onboardingscreen(),
     ),
     GetPage(name: Routes.Loginview, page: () => Loginview()),
     GetPage(name: Routes.Signup, page: () => Signup()),

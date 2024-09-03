@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:tiffin_service_customer/view_model/model/firebase/firebaseResponsemode.dart';
 
 class AddressModel {
   String? id;
@@ -57,15 +58,6 @@ class AddressModel {
   }
 }
 
-class FirebaseResponseModel {
-  Map<String, dynamic> data;
-  String docId;
 
-  FirebaseResponseModel(this.data, this.docId);
-
-  FirebaseResponseModel.fromResponse(QueryDocumentSnapshot snapshot)
-      : data = snapshot.data() as Map<String, dynamic>,
-        docId = snapshot.id;
-}
 
 

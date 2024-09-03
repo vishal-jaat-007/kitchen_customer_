@@ -8,7 +8,7 @@ import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_service.dart';
 import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
 import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controller/theme_controller.dart';
-import 'package:tiffin_service_customer/view_model/controllers/language_controller.dart';
+import 'package:tiffin_service_customer/view_model/controllers/Language/language_controller.dart';
 import 'package:tiffin_service_customer/views/components/Appbar/appbar.dart';
 import 'package:tiffin_service_customer/views/components/Divider/gradient_divider.dart';
 import 'package:tiffin_service_customer/views/components/container/containerwidget.dart';

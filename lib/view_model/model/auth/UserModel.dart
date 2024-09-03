@@ -1,3 +1,5 @@
+import 'package:tiffin_service_customer/view_model/model/firebase/firebaseResponsemode.dart';
+
 class Usermodel {
   String uid;
   String email;
@@ -5,7 +7,7 @@ class Usermodel {
   String gender;
   String dob;
   DateTime? createdAt;
-  String profileImage; 
+  String profileImage;
 
   Usermodel({
     this.uid = "",
@@ -14,18 +16,18 @@ class Usermodel {
     this.gender = "",
     this.dob = "",
     this.createdAt,
-    this.profileImage = "", 
+    this.profileImage = "",
   });
 
-  Usermodel.fromJson(Map<String, dynamic> json, this.uid)
-      : email = json["email"] ?? "",
-        username = json["username"] ?? "",
-        gender = json["gender"] ?? "",
-        dob = json["dob"] ?? "",
-        createdAt = (json["createdAt"] != null)
-            ? DateTime.tryParse(json["createdAt"])
+  Usermodel.fromJson(FirebaseResponseModel json, this.uid)
+      : email = json.data["email"] ?? "",
+        username = json.data["username"] ?? "",
+        gender = json.data["gender"] ?? "",
+        dob = json.data["dob"] ?? "",
+        createdAt = (json.data["createdAt"] != null)
+            ? DateTime.tryParse(json.data["createdAt"])
             : null,
-        profileImage = json["profileImage"] ?? ""; 
+        profileImage = json.data["profileImage"] ?? "";
 
   Map<String, dynamic> tojson() => {
         "uid": uid,
@@ -34,7 +36,7 @@ class Usermodel {
         "gender": gender,
         "dob": dob,
         "createdAt": createdAt?.toIso8601String(),
-        "profileImage": profileImage, 
+        "profileImage": profileImage,
       };
 
   Usermodel copyWith({
@@ -44,7 +46,7 @@ class Usermodel {
     String? gender,
     String? dob,
     DateTime? createdAt,
-    String? profileImage, 
+    String? profileImage,
   }) {
     return Usermodel(
       uid: uid ?? this.uid,
@@ -56,4 +58,7 @@ class Usermodel {
       profileImage: profileImage ?? this.profileImage,
     );
   }
+  
 }
+
+

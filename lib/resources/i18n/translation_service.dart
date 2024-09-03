@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:get/get_navigation/src/root/internacionalization.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
-import 'package:tiffin_service_customer/view_model/model/language_model.dart';
+import 'package:tiffin_service_customer/view_model/model/language/language_model.dart';
 
 class TranslationService extends Translations {
   static const locale = Locale('en', 'US');
