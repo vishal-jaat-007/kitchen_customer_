@@ -1,71 +1,56 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tiffin_service_customer/view_model/controllers/firebaseresponse.dart/firebaseResponsemodel.dart';
-
 class AddressModel {
-  String? id;
-  String? houseNo;
-  String? addresstitle;
-  String? contactName;
-  String? contactNumber;
-  GeoPoint? location;
-  String? userId; 
+  final String id;
+  final String userId;
+  final String addresstitle;
+  final String contactName;
+  final String houseNo;
+  final String contactNumber;
+
   AddressModel({
-    this.id,
-    this.houseNo,
-    this.addresstitle,
-    this.contactName,
-    this.contactNumber,
-    this.location,
-    this.userId,
+    required this.id,
+    required this.userId,
+    required this.addresstitle,
+    required this.contactName,
+    required this.houseNo,
+    required this.contactNumber,
   });
-
-  // Convert AddressModel to Map for Firestore
-  Map<String, dynamic> toMap() {
-    return {
-      'houseNo': houseNo ?? "",
-      'addresstitle': addresstitle ?? "",
-      'contactName': contactName ?? "",
-      'contactNumber': contactNumber ?? "",
-      'location': location, // Firestore handles GeoPoint serialization
-      'userId': userId ?? "", // Added userId to map
-    };
-  }
-
-  // Create AddressModel from a Map
-  static AddressModel fromMap(Map<String, dynamic> map, String docId) {
+  factory AddressModel.fromMap(Map<String, dynamic> data, String id) {
     return AddressModel(
-      id: docId,
-      houseNo: map['houseNo'] ?? "",
-      addresstitle: map['addresstitle'] ?? "",
-      contactName: map['contactName'] ?? "",
-      contactNumber: map['contactNumber'] ?? "",
-      location:
-          map['location'] is GeoPoint ? map['location'] : GeoPoint(0.0, 0.0),
-      userId: map['userId'], // Extract userId from map
+      id: id,
+      userId: data['userId'] ?? '',
+      addresstitle: data['addresstitle'] ?? '',
+      contactName: data['contactName'] ?? '',
+      houseNo: data['houseNo'] ?? '',
+      contactNumber: data['contactNumber'] ?? '',
     );
   }
 
-  // Create AddressModel from Firestore Document
-  static AddressModel fromFirestore(FirebaseResponseModel response) {
-    return fromMap(response.data, response.docId);
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'userId': userId,
+      'addresstitle': addresstitle,
+      'contactName': contactName,
+      'houseNo': houseNo,
+      'contactNumber': contactNumber,
+    };
   }
 
   AddressModel copyWith({
     String? id,
-    String? houseNo,
+    String? userId,
     String? addresstitle,
     String? contactName,
+    String? houseNo,
     String? contactNumber,
-    GeoPoint? location,
   }) {
     return AddressModel(
       id: id ?? this.id,
-      houseNo: houseNo ?? this.houseNo,
+      userId: userId ?? this.userId,
       addresstitle: addresstitle ?? this.addresstitle,
       contactName: contactName ?? this.contactName,
+      houseNo: houseNo ?? this.houseNo,
       contactNumber: contactNumber ?? this.contactNumber,
-      location: location ?? this.location,
-      userId: userId ?? this.userId, 
     );
   }
 }

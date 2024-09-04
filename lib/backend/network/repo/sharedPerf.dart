@@ -12,7 +12,7 @@ class SpData {
   static Future setprafdata(String key, String value) async {  
     await _preferences.setString(key, value);
   }
-
+ 
   static String getprafdata(String key) {
     return _preferences.getString(key).toString();
   }

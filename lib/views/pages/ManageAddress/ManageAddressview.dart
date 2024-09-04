@@ -144,7 +144,7 @@ class _ManageaddressState extends State<Manageaddress> {
                               ],
                             ),
                             title: Text(
-                              address.addresstitle.toString(),
+                              address.addresstitle,
                               style: styles.textthme.fs16_regular,
                             ),
                             subtitle: Text(
@@ -167,8 +167,8 @@ class _ManageaddressState extends State<Manageaddress> {
                                             .AreyousureyouwanttoDelete.tr,
                                         title: LanguageConstants.Delete.tr,
                                         onPressed: () async {
-                                          await addressController.deleteAddress(
-                                              address.id.toString());
+                                          await addressController
+                                              .deleteAddress(address.id);
                                           Get.back();
                                           setState(() {
                                             _addressesFuture =
@@ -185,7 +185,7 @@ class _ManageaddressState extends State<Manageaddress> {
                                 GestureDetector(
                                   onTap: () {
                                     Get.toNamed(Routes.AddAdrees,
-                                        arguments: address.toMap());
+                                        arguments: address);
                                   },
                                   child: Icon(Icons.edit_outlined,
                                       color: styles.appcolors.primarycolor),
@@ -203,7 +203,6 @@ class _ManageaddressState extends State<Manageaddress> {
           ],
         ),
       ),
-      
     );
   }
 }

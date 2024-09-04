@@ -34,6 +34,8 @@ class _AddNewAddressState extends State<AddNewAddress> {
   late final TextEditingController _contactNameController;
   late final TextEditingController _contactNumberController;
   late final AddressController _addressController;
+  late final TextEditingController _userId;
+  late AddressModel? _address;
 
   @override
   void initState() {
@@ -45,44 +47,47 @@ class _AddNewAddressState extends State<AddNewAddress> {
     _contactNameController = TextEditingController();
     _contactNumberController = TextEditingController();
 
-    _initializeFields();
-  }
+    _userId = TextEditingController(); // Replace with actual user ID retrieval
 
-  Future<void> _initializeFields() async {
-    if (_addressController.addresses.isNotEmpty) {
-      final address = _addressController.addresses.first;
-
-      _houseNoController.text = address.houseNo ?? '';
-      _addressTitleController.text = address.addresstitle ?? '';
-      _contactNameController.text = address.contactName ?? '';
-      _contactNumberController.text = address.contactNumber ?? '';
+    // Check if there's an address passed in arguments for editing
+    final AddressModel? addressFromArgs = Get.arguments as AddressModel?;
+    if (addressFromArgs != null) {
+      _address = addressFromArgs;
+      _houseNoController.text = addressFromArgs.houseNo;
+      _addressTitleController.text = addressFromArgs.addresstitle;
+      _contactNameController.text = addressFromArgs.contactName;
+      _contactNumberController.text = addressFromArgs.contactNumber;
+      _userId.text = addressFromArgs.userId; // Set userId
+    } else {
+      _address = AddressModel(
+        id: "",
+        userId: _userId.text,
+        addresstitle: '',
+        contactName: '',
+        houseNo: '',
+        contactNumber: '',
+      );
     }
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
-  }
-
-  void _onCameraMove(CameraPosition position) {
-    _lastMapPosition = position.target;
-  }
-
-  void _createAddress() async {
+  Future<void> _createOrUpdateAddress() async {
     if (_houseNoController.text.isNotEmpty &&
         _addressTitleController.text.isNotEmpty &&
         _contactNameController.text.isNotEmpty &&
         _contactNumberController.text.isNotEmpty) {
-      final addressModel = AddressModel(
+      final addressModel = _address!.copyWith(
         addresstitle: _addressTitleController.text,
         contactName: _contactNameController.text,
         houseNo: _houseNoController.text,
         contactNumber: _contactNumberController.text,
+        userId: _userId.text,
       );
 
-      await _addressController.addAddress(addressModel.toMap());
+      await _addressController.addOrUpdateAddress(addressModel);
 
       Get.toNamed(Routes.Manageaddress);
-      Get.snackbar('Success', 'Address saved successfully');
+      Get.snackbar('Success',
+          'Address ${_address!.id.isEmpty ? 'saved' : 'updated'} successfully');
     } else {
       Get.snackbar('Error', 'All fields are required');
     }
@@ -122,12 +127,12 @@ class _AddNewAddressState extends State<AddNewAddress> {
             Container(
               height: Appservices.getScreenHeight() / 2,
               child: GoogleMap(
-                onMapCreated: _onMapCreated,
+                // onMapCreated: _onMapCreated,
                 initialCameraPosition:
                     CameraPosition(target: _center, zoom: 18.0),
                 mapType: _currentMapType,
                 markers: _markers,
-                onCameraMove: _onCameraMove,
+                // onCameraMove: _onCameraMove,
               ),
             ),
             Containerwidget(
@@ -168,7 +173,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
                       Primarybtn(
                         isExpanded: true,
                         name: LanguageConstants.saved_address.tr,
-                        onPressed: _createAddress,
+                        onPressed: _createOrUpdateAddress,
                       ),
                     ],
                   ),

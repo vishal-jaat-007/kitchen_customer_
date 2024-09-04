@@ -133,13 +133,14 @@ class _SignupState extends State<Signup> {
                                 snackPosition: SnackPosition.BOTTOM,
                               );
                             } catch (e) {
-                              Get.snackbar(
-                                'Signup Error',
-                                'An unexpected error occurred.',
-                                backgroundColor: styles.appcolors.darkorange,
-                                colorText: styles.appcolors.whitecolor,
-                                snackPosition: SnackPosition.BOTTOM,
-                              );
+                              print(e.toString());
+                              // Get.snackbar(
+                              //   'Signup Error',
+                              //   'An unexpected error occurred.',
+                              //   backgroundColor: styles.appcolors.darkorange,
+                              //   colorText: styles.appcolors.whitecolor,
+                              //   snackPosition: SnackPosition.BOTTOM,
+                              // );
                             } finally {
                               setState(() {
                                 loading = false;

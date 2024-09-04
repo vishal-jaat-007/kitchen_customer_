@@ -1,32 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:tiffin_service_customer/backend/network/backend/Firebaseresponse.dart';
 import 'package:tiffin_service_customer/view_model/model/address/address_model.dart';
-import 'package:tiffin_service_customer/view_model/model/firebase/firebaseResponsemode.dart';
 
 class AddressController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   RxList<AddressModel> addresses = <AddressModel>[].obs;
 
-  Future<void> addAddress(Map<String, dynamic> data) async {
+  Future<void> addOrUpdateAddress(AddressModel address) async {
     try {
-      final docRef = await _firestore.collection("Address").add(data);
-      final address = AddressModel.fromMap(data, docRef.id);
-      addresses.add(address);
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  Future<void> updateAddress(String id, Map<String, dynamic> data) async {
-    try {
-      await _firestore.collection("Address").doc(id).update(data);
-      // Optionally, you can refresh the local list of addresses
-      final updatedAddress = AddressModel.fromMap(data, id);
-      final index = addresses.indexWhere((address) => address.id == id);
-      if (index != -1) {
-        addresses[index] = updatedAddress;
+      if (address.id.isEmpty) {
+        // Add new address
+        final docRef =
+            await _firestore.collection("Address").add(address.toMap());
+        final newAddress = address.copyWith(id: docRef.id);
+        addresses.add(newAddress);
+      } else {
+        // Update existing address
+        await _firestore
+            .collection("Address")
+            .doc(address.id)
+            .update(address.toMap());
+        final index = addresses.indexWhere((addr) => addr.id == address.id);
+        if (index != -1) {
+          addresses[index] = address;
+        }
       }
     } catch (e) {
       print(e.toString());
