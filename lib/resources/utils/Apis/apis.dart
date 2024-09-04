@@ -41,11 +41,9 @@ class Apis {
     }
   }
 
- 
 //  ----------------------
 // -----------------
- 
- 
+
   static Future<String?> uploadImageToFirebase(File image) async {
     try {
       final storageRef = _firebaseStorage
@@ -90,7 +88,6 @@ class Apis {
     }
   }
 
-  // Method to update a user
   static Future<void> updateUser({
     required String id,
     required String username,
@@ -100,26 +97,49 @@ class Apis {
     File? profileImage,
   }) async {
     try {
+      // Fetch the current user data to retrieve the existing profile image URL
+      DocumentSnapshot userDoc = await userDocumentRef(id).get();
+      if (!userDoc.exists) {
+        throw Exception('User does not exist');
+      }
+
+      // Safely cast the document data to Map<String, dynamic>
+      final data = userDoc.data() as Map<String, dynamic>?;
+
+      // Get the existing profile image URL from Firestore
+      String? existingProfileImageUrl = data?['profileImage'] as String?;
+
+      // If a new profile image is provided, upload it and get the new URL
       String? profileImageUrl;
       if (profileImage != null) {
         profileImageUrl = await uploadImageToFirebase(profileImage);
+      } else {
+        // Use the existing profile image URL if no new image is provided
+        profileImageUrl = existingProfileImageUrl;
       }
 
+      // Update the user document with the new data
       await userDocumentRef(id).update({
         'username': username,
+        'email': email,
         'dob': dob,
         'gender': gender,
         'profileImage': profileImageUrl,
         'updatedAt': DateTime.now().toIso8601String(),
-      }).then((val) {
-        var userController = Get.find<UserController>();
-
-        userController.setUser(userController.user
-            .copyWith(gender: gender, dob: dob, profileImage: profileImageUrl));
-        print(userController.user.profileImage);
       });
+
+      // Update the user controller with the new data
+      var userController = Get.find<UserController>();
+      userController.setUser(userController.user.copyWith(
+        username: username,
+        email: email,
+        dob: dob,
+        gender: gender,
+        profileImage: profileImageUrl ?? existingProfileImageUrl,
+      ));
     } catch (e) {
+      print('Error updating user: $e');
       throw Exception('Failed to update user: $e');
     }
-  } 
+  }
 }

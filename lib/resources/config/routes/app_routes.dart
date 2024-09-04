@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:tiffin_service_customer/fetch/data_screen.dart';
 import 'package:tiffin_service_customer/views/pages/auth/Loginview/Loginview.dart';
 import 'package:tiffin_service_customer/views/pages/auth/signup/Signup.dart';
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -65,99 +66,118 @@ class _SignupState extends State<Signup> {
                   ]),
                   Gap(20),
                   Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Username",
-                            style: styles.textthme.fs16_regular.copyWith(
-                                color: controller.isDarkMode()
-                                    ? styles.appcolors.whitecolor
-                                    : styles.appcolors.black50)),
-                        Gap(5),
-                        Textfieldwidget(
-                            validator: UsernameValidator(),
-                            controller: _username,
-                            hinttext: LanguageConstants.enteryourname.tr),
-                        Gap(10),
-                        Text(LanguageConstants.email.tr,
-                            style: styles.textthme.fs16_regular.copyWith(
-                                color: controller.isDarkMode()
-                                    ? styles.appcolors.whitecolor
-                                    : styles.appcolors.black50)),
-                        Gap(5),
-                        Textfieldwidget(
-                            validator: EmailValidator(),
-                            controller: _email,
-                            hinttext: LanguageConstants.Mail.tr),
-                        Gap(10),
-                        Text("Password",
-                            style: styles.textthme.fs16_regular.copyWith(
-                                color: controller.isDarkMode()
-                                    ? styles.appcolors.whitecolor
-                                    : styles.appcolors.black50)),
-                        Gap(5),
-                        Textfieldwidget(
-                            validator: PasswordValidator(),
-                            controller: _password,
-                            hinttext: LanguageConstants.enteryourpassword.tr)
-                      ]),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Username",
+                          style: styles.textthme.fs16_regular.copyWith(
+                              color: controller.isDarkMode()
+                                  ? styles.appcolors.whitecolor
+                                  : styles.appcolors.black50)),
+                      Gap(5),
+                      Textfieldwidget(
+                          validator: UsernameValidator(),
+                          controller: _username,
+                          hinttext: LanguageConstants.enteryourname.tr),
+                      Gap(10),
+                      Text(LanguageConstants.email.tr,
+                          style: styles.textthme.fs16_regular.copyWith(
+                              color: controller.isDarkMode()
+                                  ? styles.appcolors.whitecolor
+                                  : styles.appcolors.black50)),
+                      Gap(5),
+                      Textfieldwidget(
+                          validator: EmailValidator(),
+                          controller: _email,
+                          hinttext: LanguageConstants.Mail.tr),
+                      Gap(10),
+                      Text("Password",
+                          style: styles.textthme.fs16_regular.copyWith(
+                              color: controller.isDarkMode()
+                                  ? styles.appcolors.whitecolor
+                                  : styles.appcolors.black50)),
+                      Gap(5),
+                      Textfieldwidget(
+                          validator: PasswordValidator(),
+                          controller: _password,
+                          hinttext: LanguageConstants.enteryourpassword.tr)
+                    ],
+                  ),
                   Gap(25),
-                  Row(children: [
-                    Primarybtn(
-                      loading: loading,
-                      name: LanguageConstants.signUp.tr,
-                      onPressed: () async {
-                        if (_globalKey.currentState!.validate()) {
-                          setState(() {
-                            loading = true;
-                          });
-                          try {
-                            await AuthDataHandler().signup(
-                                user: Usermodel(
-                                    createdAt: DateTime.now(),
-                                    username: _username.text,
-                                    email: _email.text,
-                                    dob: '',
-                                    gender: ''),
-                                password: _password.text);
-                          } catch (e) {
-                            Get.snackbar(
-                              LanguageConstants.enteryourname.tr,
-                              e.toString(),
-                              backgroundColor: styles.appcolors.darkorange,
-                              colorText: styles.appcolors.whitecolor,
-                              snackPosition: SnackPosition.BOTTOM,
-                            );
-                          } finally {
+                  Row(
+                    children: [
+                      Primarybtn(
+                        loading: loading,
+                        name: LanguageConstants.signUp.tr,
+                        onPressed: () async {
+                          if (_globalKey.currentState!.validate()) {
                             setState(() {
-                              loading = false;
+                              loading = true;
                             });
+                            try {
+                              await AuthDataHandler().signup(
+                                user: Usermodel(
+                                  createdAt: DateTime.now(),
+                                  username: _username.text,
+                                  email: _email.text,
+                                  dob: '',
+                                  gender: '',
+                                ),
+                                password: _password.text,
+                              );
+                            } on PlatformException catch (e) {
+                              Get.snackbar(
+                                'Signup Error',
+                                e.message ?? 'An unexpected error occurred.',
+                                backgroundColor: styles.appcolors.darkorange,
+                                colorText: styles.appcolors.whitecolor,
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            } catch (e) {
+                              Get.snackbar(
+                                'Signup Error',
+                                'An unexpected error occurred.',
+                                backgroundColor: styles.appcolors.darkorange,
+                                colorText: styles.appcolors.whitecolor,
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            } finally {
+                              setState(() {
+                                loading = false;
+                              });
+                            }
                           }
-                        }
-                      },
-                      isExpanded: true,
-                    ),
-                  ]),
+                        },
+                        isExpanded: true,
+                      ),
+                    ],
+                  ),
                   Gap(20),
                   TextrichWidget(
-                      onPressed: () {
-                        Get.toNamed(Routes.Loginview);
-                      },
-                      subtitle: LanguageConstants.logIn.tr,
-                      title:
-                          "${LanguageConstants.or.tr} ${LanguageConstants.continueText.tr} ${LanguageConstants.withText.tr} "),
+                    onPressed: () {
+                      Get.toNamed(Routes.Loginview);
+                    },
+                    subtitle: LanguageConstants.logIn.tr,
+                    title:
+                        "${LanguageConstants.or.tr} ${LanguageConstants.continueText.tr} ${LanguageConstants.withText.tr} ",
+                  ),
                   Gap(10),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    IconButton(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
                         onPressed: () {},
-                        icon: Image.asset(styles.appicon.facebook)),
-                    Gap(12),
-                    IconButton(
+                        icon: Image.asset(styles.appicon.facebook),
+                      ),
+                      Gap(12),
+                      IconButton(
                         onPressed: () {},
-                        icon: Image.asset(styles.appicon.google)),
-                  ]),
+                        icon: Image.asset(styles.appicon.google),
+                      ),
+                    ],
+                  ),
                   Gap(22),
                 ],
-              )
+              ),
             ],
           ),
         ),

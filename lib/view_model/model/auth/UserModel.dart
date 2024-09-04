@@ -24,12 +24,12 @@ class Usermodel {
         username = json.data["username"] ?? "",
         gender = json.data["gender"] ?? "",
         dob = json.data["dob"] ?? "",
-        createdAt = (json.data["createdAt"] != null)
+        createdAt = json.data["createdAt"] != null
             ? DateTime.tryParse(json.data["createdAt"])
             : null,
         profileImage = json.data["profileImage"] ?? "";
 
-  Map<String, dynamic> tojson() => {
+  Map<String, dynamic> toJson() => {
         "uid": uid,
         "email": email,
         "username": username,
@@ -58,7 +58,4 @@ class Usermodel {
       profileImage: profileImage ?? this.profileImage,
     );
   }
-  
 }
-
-

@@ -59,9 +59,11 @@ class Onboardingscreen extends StatelessWidget {
                     Primarybtn(
                         name: LanguageConstants.getStarted.tr,
                         onPressed: () {
-                          AuthRepositry().Relogin();
+                          AuthRepositry().relogin();
                         },
-                        isExpanded: true)
+                        isExpanded: true),
+                   
+                   
                   ]),
                   Gap(15),
                   TextrichWidget(
