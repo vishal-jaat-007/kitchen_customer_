@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:tiffin_service_customer/backend/network/Exceptions/exceptions.dart';
 import 'package:tiffin_service_customer/backend/network/backend/auth_data_handler.dart';
 import 'package:tiffin_service_customer/resources/Validator/validators.dart';
 import 'package:tiffin_service_customer/resources/config/app_services.dart';
@@ -55,13 +56,12 @@ class _LoginviewState extends State<Loginview> {
                   Row(children: [
                     Expanded(child: Divider()),
                     Gap(15),
-                    Text("${LanguageConstants.logIn.tr}",
+                    Text(LanguageConstants.logIn.tr,
                         style: styles.textthme.fs16_regular),
                     Gap(10),
                     Expanded(child: Divider())
                   ]),
                   Gap(20),
-                  // --- Input Fields ---
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -77,7 +77,7 @@ class _LoginviewState extends State<Loginview> {
                         hinttext: LanguageConstants.Mail.tr,
                       ),
                       Gap(10),
-                      Text("Password",
+                      Text(LanguageConstants.enteryourpassword.tr,
                           style: styles.textthme.fs16_regular.copyWith(
                               color: controller.isDarkMode()
                                   ? styles.appcolors.whitecolor
@@ -91,7 +91,6 @@ class _LoginviewState extends State<Loginview> {
                     ],
                   ),
                   Gap(25),
-                  // --- Primary Button ---
                   Row(
                     children: [
                       Primarybtn(
@@ -107,13 +106,19 @@ class _LoginviewState extends State<Loginview> {
                                 email: _email.text,
                                 password: _password.text,
                               );
-                              Get.offNamed(Routes.bottomnavigationbar);
+                              // Navigate only if login is successful
                             } catch (e) {
+                              print("Login Error: ${e.toString()}");
                               // Show error message
-                              Get.snackbar("Error", e.toString(),
-                                  backgroundColor: styles.appcolors.darkorange,
-                                  colorText: styles.appcolors.whitecolor,
-                                  snackPosition: SnackPosition.BOTTOM);
+                              Get.snackbar(
+                                "Login Error",
+                                e is DefaultException
+                                    ? "e.message"
+                                    : 'An unknown error occurred. Please try again.',
+                                backgroundColor: styles.appcolors.darkorange,
+                                colorText: styles.appcolors.whitecolor,
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
                             } finally {
                               setState(() {
                                 loading = false;
@@ -135,7 +140,6 @@ class _LoginviewState extends State<Loginview> {
                         "${LanguageConstants.or.tr} ${LanguageConstants.continueText.tr} ${LanguageConstants.withText.tr} ",
                   ),
                   Gap(10),
-                  // -- Social Media Buttons --
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

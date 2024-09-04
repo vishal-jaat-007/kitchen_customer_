@@ -16,4 +16,3 @@ import 'package:tiffin_service_customer/views/utils/utils.dart';
 import '../../../singletonClasses/singleton.dart';
 
 part "MyProfileview.dart";
-

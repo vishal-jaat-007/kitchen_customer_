@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -7,7 +8,7 @@ import 'package:tiffin_service_customer/resources/Validator/validators.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
 import 'package:tiffin_service_customer/resources/utils/Apis/apis.dart';
 import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
-import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controller/theme_controller.dart';
+import 'package:tiffin_service_customer/view_model/controllers/Theme Controller/theme_controller.dart';
 import 'package:tiffin_service_customer/view_model/controllers/auth/user_controller.dart';
 import 'package:tiffin_service_customer/view_model/model/auth/UserModel.dart';
 import 'package:tiffin_service_customer/views/components/Appbar/appbar.dart';
@@ -47,10 +48,12 @@ class _ProfileeditState extends State<Profileedit> {
     _birthDateController =
         TextEditingController(text: _userController.user.dob ?? '');
     _genderController =
-        TextEditingController(text: _userController.user.gender ?? ''); 
-  
+        TextEditingController(text: _userController.user.gender ?? '');
+
+    // Load existing profile image if available
     if (_userController.user.profileImage.isNotEmpty) {
-      if (Uri.parse(_userController.user.profileImage).isAbsolute) {
+      if (Uri.tryParse(_userController.user.profileImage)?.isAbsolute ??
+          false) {
         imageFile = null;
       } else {
         imageFile = File(_userController.user.profileImage);
@@ -84,47 +87,53 @@ class _ProfileeditState extends State<Profileedit> {
                 padding: EdgeInsets.symmetric(vertical: 40),
                 shadow: false,
                 child: Center(
-                  child: Stack(alignment: Alignment(0.9, 1), children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: imageFile == null
-                          ? (Uri.parse(_userController.user.profileImage)
-                                  .isAbsolute
-                              ? Image.network(_userController.user.profileImage,
-                                  height: 134, width: 134, fit: BoxFit.cover)
-                              : Image.asset(styles.appimg.Profileimg,
-                                  height: 134, width: 134, fit: BoxFit.cover))
-                          : Image.file(imageFile!,
-                              height: 134, width: 134, fit: BoxFit.cover),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        var result = await Get.bottomSheet(Image_Picker());
-                        if (result != null) {
-                          setState(() {
-                            imageFile = result;
-                            _userController.updateProfileImage(result);
-                          });    
-                        }
-                      },
-                      child: Container(
-                        height: 38.h,
-                        width: 38.h,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 1.r,
-                                offset: Offset(0, 1))
-                          ],
-                          shape: BoxShape.circle,
-                          color: styles.appcolors.whitecolor,
-                        ),
-                        child: Icon(Icons.edit_outlined,
-                            size: 25, color: styles.appcolors.primarycolor),
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: imageFile == null
+                            ? (Uri.tryParse(_userController.user.profileImage)
+                                        ?.isAbsolute ??
+                                    false
+                                ? Image.network(
+                                    _userController.user.profileImage,
+                                    height: 134,
+                                    width: 134,
+                                    fit: BoxFit.cover)
+                                : Image.asset(styles.appimg.Profileimg,
+                                    height: 134, width: 134, fit: BoxFit.cover))
+                            : Image.file(imageFile!,
+                                height: 134, width: 134, fit: BoxFit.cover),
                       ),
-                    )
-                  ]),
+                      InkWell(
+                        onTap: () async {
+                          var result = await Get.bottomSheet(Image_Picker());
+                          if (result != null) {
+                            setState(() {
+                              imageFile = result;
+                            });
+                          }
+                        },
+                        child: Container(
+                          height: 38.h,
+                          width: 38.h,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 1.r,
+                                  offset: Offset(0, 1))
+                            ],
+                            shape: BoxShape.circle,
+                            color: styles.appcolors.whitecolor,
+                          ),
+                          child: Icon(Icons.edit_outlined,
+                              size: 25, color: styles.appcolors.primarycolor),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Gap(15),
@@ -182,7 +191,8 @@ class _ProfileeditState extends State<Profileedit> {
                             email: _emailController.text.trim(),
                             dob: _birthDateController.text.trim(),
                             gender: _genderController.text.trim(),
-                            profileImage: imageFile,
+                            profileImage:
+                                imageFile, 
                           );
 
                           _userController.setUser(Usermodel(
@@ -190,8 +200,10 @@ class _ProfileeditState extends State<Profileedit> {
                             username: _nameController.text.trim(),
                             email: _emailController.text.trim(),
                             dob: _birthDateController.text.trim(),
-                            gender: _genderController.text.trim(),
-                            profileImage: imageFile?.path ?? "",
+                            // gender: _genderController.text.trim(),
+                            profileImage: imageFile?.path ??
+                                _userController.user
+                                    .profileImage, 
                           ));
 
                           Profileeditdialog(); // Show success dialog

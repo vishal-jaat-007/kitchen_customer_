@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:tiffin_service_customer/view_model/model/firebase/firebaseResponsemode.dart';
+import 'package:tiffin_service_customer/view_model/controllers/firebaseresponse.dart/firebaseResponsemodel.dart';
 
 class AddressModel {
   String? id;
@@ -9,7 +8,7 @@ class AddressModel {
   String? contactName;
   String? contactNumber;
   GeoPoint? location;
-
+  String? userId; 
   AddressModel({
     this.id,
     this.houseNo,
@@ -17,6 +16,7 @@ class AddressModel {
     this.contactName,
     this.contactNumber,
     this.location,
+    this.userId,
   });
 
   // Convert AddressModel to Map for Firestore
@@ -27,11 +27,12 @@ class AddressModel {
       'contactName': contactName ?? "",
       'contactNumber': contactNumber ?? "",
       'location': location, // Firestore handles GeoPoint serialization
+      'userId': userId ?? "", // Added userId to map
     };
   }
 
   // Create AddressModel from a Map
-  factory AddressModel.fromMap(Map<String, dynamic> map, String docId) {
+  static AddressModel fromMap(Map<String, dynamic> map, String docId) {
     return AddressModel(
       id: docId,
       houseNo: map['houseNo'] ?? "",
@@ -40,17 +41,18 @@ class AddressModel {
       contactNumber: map['contactNumber'] ?? "",
       location:
           map['location'] is GeoPoint ? map['location'] : GeoPoint(0.0, 0.0),
+      userId: map['userId'], // Extract userId from map
     );
   }
 
   // Create AddressModel from Firestore Document
-  factory AddressModel.fromFirestore(FirebaseResponseModel response) {
-    return AddressModel.fromMap(response.data, response.docId);
+  static AddressModel fromFirestore(FirebaseResponseModel response) {
+    return fromMap(response.data, response.docId);
   }
 
   AddressModel copyWith({
     String? id,
-    String? houseNo,  
+    String? houseNo,
     String? addresstitle,
     String? contactName,
     String? contactNumber,
@@ -63,10 +65,7 @@ class AddressModel {
       contactName: contactName ?? this.contactName,
       contactNumber: contactNumber ?? this.contactNumber,
       location: location ?? this.location,
+      userId: userId ?? this.userId, 
     );
   }
 }
-
-
-
-

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -44,12 +45,10 @@ class _AddNewAddressState extends State<AddNewAddress> {
     _contactNameController = TextEditingController();
     _contactNumberController = TextEditingController();
 
-    // Initialize text fields if you are editing an existing address
     _initializeFields();
   }
 
   Future<void> _initializeFields() async {
-    // Example to get the first address if you have multiple, or customize this as needed
     if (_addressController.addresses.isNotEmpty) {
       final address = _addressController.addresses.first;
 
@@ -69,7 +68,6 @@ class _AddNewAddressState extends State<AddNewAddress> {
   }
 
   void _createAddress() async {
-    // Validate the inputs before proceeding
     if (_houseNoController.text.isNotEmpty &&
         _addressTitleController.text.isNotEmpty &&
         _contactNameController.text.isNotEmpty &&
@@ -94,7 +92,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
   void dispose() {
     _houseNoController.dispose();
     _addressTitleController.dispose();
-    _contactNameController.dispose();  
+    _contactNameController.dispose();
     _contactNumberController.dispose();
     super.dispose();
   }

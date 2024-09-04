@@ -42,15 +42,30 @@ String getResponse(HttpResponse response) {
       throw DefaultException(message: "Something Went Wrong Try again later");
   }
 }
-
 AppExceptions getResponseFirebase(FirebaseAuthException exception) {
-  final statusCode = exception.code;
-  print(statusCode);
-  switch (statusCode) {
-    case "invalid-credential":
+  final code = exception.code;
+  print("Firebase Error Code: $code");
+  switch (code) {
+    case "invalid-email":
       return CommunicationException(
-          message: "The username or password you entered is wrong.");
+          message: "The email address is badly formatted.");
+    case "user-disabled":
+      return CommunicationException(
+          message: "The user account has been disabled.");
+    case "user-not-found":
+      return CommunicationException(
+          message: "No user corresponding to the given email.");
+    case "wrong-password":
+      return CommunicationException(message: "The password is invalid.");
+    case "email-already-in-use":
+      return BadRequest(
+          message: "The email address is already in use by another account.");
+    case "operation-not-allowed":
+      return CommunicationException(
+          message: "Operation not allowed. Please contact support.");
     default:
-      return DefaultException(message: "Something Went Wrong Try again later");
+      return DefaultException(
+          message: "An unknown error occurred. Please try again later.");
   }
 }
+
