@@ -7,6 +7,7 @@ class Onboardingscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SingleTonClass styles = SingleTonClass.instance;
     final controller = Get.find<ThemeController>();
+    bool loading= false;
 
     return Scaffold(
       body: Container(

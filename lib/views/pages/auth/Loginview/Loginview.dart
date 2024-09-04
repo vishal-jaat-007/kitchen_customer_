@@ -110,6 +110,8 @@ class _LoginviewState extends State<Loginview> {
                               Get.offNamed(Routes.bottomnavigationbar);
                             } catch (e) {
                               // Show error message
+
+                              print(e.toString());
                               Get.snackbar("Error", e.toString(),
                                   backgroundColor: styles.appcolors.darkorange,
                                   colorText: styles.appcolors.whitecolor,

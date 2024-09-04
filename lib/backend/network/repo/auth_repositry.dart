@@ -38,6 +38,8 @@ class AuthRepositry extends Authentication {
       }
     } on FirebaseAuthException catch (e) {
       final error = getResponseFirebase(e);
+
+      
       throw SnackBar(
           backgroundColor: Colors.black, content: Text(error.toString()));
     }
@@ -92,6 +94,7 @@ class AuthRepositry extends Authentication {
     final id = SpData.getprafdata(SpData.userid);
 
     if (id.isNotEmpty) {
+      
       final data = await Apis.userDocumentRef(id).get();
       if (data.exists) {
         final userdata =

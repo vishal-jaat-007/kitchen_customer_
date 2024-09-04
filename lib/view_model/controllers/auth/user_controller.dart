@@ -22,7 +22,7 @@ class UserController extends GetxController {
   }
 
   // Method to update profile image
-  void updateProfileImage(File image) {
+   updateProfileImage(File image) {
     _user.update((user) {
       if (user != null) {
         user.profileImage = image.path;

@@ -27,6 +27,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
   final Set<Marker> _markers = {};
   LatLng _lastMapPosition = _center;
   MapType _currentMapType = MapType.normal;
+  bool loading = false;
 
   final TextEditingController _houseNoController = TextEditingController();
   final TextEditingController _addressTitleController = TextEditingController();
@@ -44,6 +45,9 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
   void _createAddress() async {
     // Validate the inputs before proceeding
+    setState(() {
+      loading = true;
+    });
     if (_houseNoController.text.isNotEmpty &&
         _addressTitleController.text.isNotEmpty &&
         _contactNameController.text.isNotEmpty &&
@@ -58,7 +62,9 @@ class _AddNewAddressState extends State<AddNewAddress> {
       final addressController = Get.find<AddressController>();
 
       await addressController.addAddress(addressModel.toMap());
-
+      setState(() {
+        loading = false;
+      });
       Get.toNamed(Routes.Manageaddress);
       Get.snackbar('Success', 'Address saved successfully');
     } else {
@@ -68,8 +74,6 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
   @override
   Widget build(BuildContext context) {
-   
-
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -134,6 +138,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
                   Row(
                     children: [
                       Primarybtn(
+                        loading: loading,
                         isExpanded: true,
                         name: LanguageConstants.saved_address.tr,
                         onPressed: _createAddress,

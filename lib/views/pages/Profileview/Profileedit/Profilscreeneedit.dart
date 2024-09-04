@@ -36,11 +36,18 @@ class _ProfileeditState extends State<Profileedit> {
   late final TextEditingController _genderController;
   File? imageFile;
   bool loading = false;
-
   @override
   void initState() {
     super.initState();
-    _userController = Get.find<UserController>();
+
+    try {
+      _userController = Get.find<UserController>();
+    } catch (e) {
+      print('UserController is not initialized: $e');
+      Get.put(UserController());
+      _userController = Get.find<UserController>();
+    }
+
     _nameController =
         TextEditingController(text: _userController.user.username ?? '');
     _emailController =
@@ -51,21 +58,20 @@ class _ProfileeditState extends State<Profileedit> {
         TextEditingController(text: _userController.user.gender ?? '');
 
     if (_userController.user.profileImage.isNotEmpty) {
+      // Check if the profile image is a valid URL
       if (Uri.parse(_userController.user.profileImage).isAbsolute) {
-        imageFile = null;
+        imageFile =
+            null; // Reset imageFile to null if the image is a network URL
       } else {
-        imageFile = File(_userController.user.profileImage);
+        // Check if the local file exists
+        File localFile = File(_userController.user.profileImage);
+        if (localFile.existsSync()) {
+          imageFile = localFile; // Set the imageFile if it exists
+        } else {
+          imageFile = null; // Set to null if the file does not exist
+        }
       }
     }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _nameController.dispose();
-    _birthDateController.dispose();
-    _genderController.dispose();
-    super.dispose();
   }
 
   @override
@@ -82,52 +88,66 @@ class _ProfileeditState extends State<Profileedit> {
           child: ListView(
             children: [
               Containerwidget(
-                padding: EdgeInsets.symmetric(vertical: 40),
-                shadow: false,
-                child: Center(
-                  child: Stack(alignment: Alignment(0.9, 1), children: [
+                  padding: EdgeInsets.symmetric(vertical: 40),
+                  shadow: false,
+                  child: Center(
+                      child: Stack(alignment: Alignment(0.9, 1), children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: imageFile == null
-                          ? (Uri.parse(_userController.user.profileImage)
-                                  .isAbsolute
-                              ? Image.network(_userController.user.profileImage,
-                                  height: 134, width: 134, fit: BoxFit.cover)
-                              : Image.asset(styles.appimg.Profileimg,
-                                  height: 134, width: 134, fit: BoxFit.cover))
-                          : Image.file(imageFile!,
-                              height: 134, width: 134, fit: BoxFit.cover),
+                      child: (imageFile != null)
+                          ? Image.file(
+                              imageFile!,
+                              height: 134,
+                              width: 134,
+                              fit: BoxFit.cover,
+                            )
+                          : (_userController.user.profileImage.isNotEmpty &&
+                                  Uri.parse(_userController.user.profileImage)
+                                      .isAbsolute)
+                              ? Image.network(
+                                  _userController.user.profileImage,
+                                  height: 134,
+                                  width: 134,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  styles.appimg
+                                      .Profileimg, // Provide a placeholder image
+                                  height: 134,
+                                  width: 134,
+                                  fit: BoxFit.cover,
+                                ),
                     ),
                     InkWell(
-                      onTap: () async {
-                        var result = await Get.bottomSheet(Image_Picker());
-                        if (result != null) {
-                          setState(() {
-                            imageFile = result;
-                            _userController.updateProfileImage(result);
-                          });    
-                        }
-                      },
-                      child: Container(
-                        height: 38.h,
-                        width: 38.h,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 1.r,
-                                offset: Offset(0, 1))
-                          ],
-                          shape: BoxShape.circle,
-                          color: styles.appcolors.whitecolor,
-                        ),
-                        child: Icon(Icons.edit_outlined,
-                            size: 25, color: styles.appcolors.primarycolor),
-                      ),
-                    )
-                  ]),
-                ),
-              ),
+                        onTap: () async {
+                          var result = await Get.bottomSheet(Image_Picker());
+                          if (result != null) {
+                            setState(() {
+                              imageFile = result;
+                              _userController.updateProfileImage(result);
+                            });
+                          }
+                        },
+                        child: Container(
+                            height: 38.h,
+                            width: 38.h,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 1.r,
+                                  offset: Offset(0, 1),
+                                ),
+                              ],
+                              shape: BoxShape.circle,
+                              color: styles.appcolors.whitecolor,
+                            ),
+                            child: Icon(
+                              Icons.edit_outlined,
+                              size: 25,
+                              color: styles.appcolors.primarycolor,
+                            )))
+                  ]))),
               Gap(15),
               Containerwidget(
                 child: Column(
