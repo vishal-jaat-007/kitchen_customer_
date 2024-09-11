@@ -67,135 +67,122 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
     SingleTonClass styles = SingleTonClass.instance;
 
     return Scaffold(
-      appBar:
-          PrimaryAppBar(titleText: LanguageConstants.completeYourProfile.tr),
-      body: Form(
-        key: _globalKey,
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: ListView(
-            children: [
-              Containerwidget(
-                shadow: false,
-                child: Center(
-                  child: Stack(
-                    alignment: Alignment(0.9, 1.2),
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(100.r),
-                        child: imagefile == null
-                            ? Image.asset(styles.appimg.Profileimg,
-                                height: 134, width: 134, fit: BoxFit.cover)
-                            : Image.file(imagefile!,
-                                height: 134, width: 134, fit: BoxFit.cover),
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          var result = await Get.bottomSheet(Image_Picker());
-                          if (result != null) {
+        appBar:
+            PrimaryAppBar(titleText: LanguageConstants.completeYourProfile.tr),
+        body: Form(
+            key: _globalKey,
+            child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: ListView(children: [
+                  Containerwidget(
+                      shadow: false,
+                      child: Center(
+                          child:
+                              Stack(alignment: Alignment(0.9, 1.2), children: [
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(100.r),
+                            child: imagefile == null
+                                ? Image.asset(styles.appimg.Profileimg,
+                                    height: 134, width: 134, fit: BoxFit.cover)
+                                : Image.file(imagefile!,
+                                    height: 134,
+                                    width: 134,
+                                    fit: BoxFit.cover)),
+                        InkWell(
+                            onTap: () async {
+                              var result =
+                                  await Get.bottomSheet(Image_Picker());
+                              if (result != null) {
+                                setState(() {
+                                  imagefile = result;
+                                });
+                              }
+                            },
+                            child: Container(
+                                height: 44.h,
+                                width: 44.w,
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 1.r,
+                                          offset: Offset(0, 1))
+                                    ],
+                                    shape: BoxShape.circle,
+                                    color: styles.appcolors.whitecolor),
+                                child: Icon(Icons.edit_outlined,
+                                    size: 25,
+                                    color: styles.appcolors.primarycolor)))
+                      ]))),
+                  Gap(15),
+                  Containerwidget(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        Text(LanguageConstants.name.tr,
+                            style: styles.textthme.fs16_regular.copyWith(
+                                color: controller.isDarkMode()
+                                    ? styles.appcolors.whitecolor
+                                    : styles.appcolors.black50)),
+                        Textfieldwidget(
+                            controller: _nameController,
+                            readOnly: true,
+                            hinttext: LanguageConstants.enteryourname.tr,
+                            validator: TextValidator()),
+                        Gap(10),
+                        Text(LanguageConstants.email.tr,
+                            style: styles.textthme.fs16_regular.copyWith(
+                                color: controller.isDarkMode()
+                                    ? styles.appcolors.whitecolor
+                                    : styles.appcolors.black50)),
+                        Textfieldwidget(
+                            controller: _email,
+                            readOnly: true,
+                            validator: EmailValidator(),
+                            hinttext: LanguageConstants.Mail.tr),
+                        Gap(20),
+                        Showdatepickerwidget(
+                            datecontroller: _birthDateController,
+                            hinttext: "DD/MM/YY"),
+                        Gap(20),
+                            GenderDropDownWidget(
+                          onGenderChanged: (val) {
+                            _genderController.text = val ?? '';
+                          },
+                        )
+                      ])),
+                  Gap(15),
+                  Primarybtn(
+                      loading: loading,
+                      name: LanguageConstants.register.tr,
+                      onPressed: () async {
+                        if (_globalKey.currentState!.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
+                          setState(() {
+                            loading = true;
+                          });
+
+                          try {
+                            await Apis.updateUser(
+                              id: userId,
+                              username: _nameController.text.trim(),
+                              email: _email.text.trim(),
+                              dob: _birthDateController.text.trim(),
+                              gender: _genderController.text.trim(),
+                              profileImage: imagefile,
+                            );
+                            Get.toNamed(Routes.bottomnavigationbar);
+                          } catch (e) {
+                            print(e.toString());
+                          } finally {
                             setState(() {
-                              imagefile = result;
+                              loading = false;
                             });
                           }
-                        },
-                        child: Container(
-                          height: 44.h,
-                          width: 44.w,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 1.r,
-                                offset: Offset(0, 1),
-                              )
-                            ],
-                            shape: BoxShape.circle,
-                            color: styles.appcolors.whitecolor,
-                          ),
-                          child: Icon(Icons.edit_outlined,
-                              size: 25, color: styles.appcolors.primarycolor),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Gap(15),
-              Containerwidget(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(LanguageConstants.name.tr,
-                        style: styles.textthme.fs16_regular.copyWith(
-                            color: controller.isDarkMode()
-                                ? styles.appcolors.whitecolor
-                                : styles.appcolors.black50)),
-                    Textfieldwidget(
-                        controller: _nameController,
-                        readOnly: true,
-                        hinttext: LanguageConstants.enteryourname.tr,
-                        validator: TextValidator()),
-                    Gap(10),
-                    Text(LanguageConstants.email.tr,
-                        style: styles.textthme.fs16_regular.copyWith(
-                            color: controller.isDarkMode()
-                                ? styles.appcolors.whitecolor
-                                : styles.appcolors.black50)),
-                    Textfieldwidget(
-                        controller: _email,
-                        readOnly: true,
-                        validator: EmailValidator(),
-                        hinttext: LanguageConstants.Mail.tr),
-                    Gap(20),
-                    Showdatepickerwidget(
-                        datecontroller: _birthDateController,
-                        hinttext: "DD/MM/YY"),
-                    Gap(20),
-                    GenderDropDownWidget(
-                      onGenderChanged: (val) {
-                        _genderController.text = val ?? 'null';
-                      },
-                    )
-                  ],
-                ),
-              ),
-              Gap(15),
-              Primarybtn(
-                loading: loading,
-                name: LanguageConstants.register.tr,
-                onPressed: () async {
-                  if (_globalKey.currentState!.validate()) {
-                    setState(() {
-                      loading = true;
-                    });
-                    setState(() {
-                      loading = true;
-                    });
-
-                    try {
-                      await Apis.updateUser(
-                        id: userId,
-                        username: _nameController.text.trim(),
-                        email: _email.text.trim(),
-                        dob: _birthDateController.text.trim(),
-                        gender: _genderController.text.trim(),
-                        profileImage: imagefile,
-                      );
-                      Get.toNamed(Routes.bottomnavigationbar);
-                    } catch (e) {
-                      print(e.toString());
-                    } finally {
-                      setState(() {
-                        loading = false;
-                      });
-                    }
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+                        }
+                      })
+                ]))));
   }
 }

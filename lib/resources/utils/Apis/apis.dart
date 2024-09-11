@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
@@ -21,7 +20,6 @@ class Apis {
   static Future<List<Map<String, dynamic>>> getSavedAddresses({
     required String userId,
   }) async {
-    // Check for a valid userId
     if (userId.isEmpty) {
       throw Exception('Invalid userId: It must be a non-empty string.');
     }
@@ -40,7 +38,7 @@ class Apis {
   }
 
 //  ----------------------
-// -----------------
+// ----------------
 
   static Future<String?> uploadImageToFirebase(File image) async {
     try {
@@ -116,7 +114,7 @@ class Apis {
         profileImageUrl = existingProfileImageUrl;
       }
 
-      // Update the user document with the new data
+      // Update  user document
       await userDocumentRef(id).update({
         'username': username,
         'email': email,

@@ -8,7 +8,7 @@ import 'package:tiffin_service_customer/view_model/controllers/auth/user_control
 import 'package:tiffin_service_customer/view_model/model/auth/UserModel.dart';
 
 class AuthDataHandler {
-  final _repo = AuthRepositry();
+  final _repo = AuthRepositry(); 
   final UserController _userController = Get.find<UserController>();
 
   Future<void> signup(

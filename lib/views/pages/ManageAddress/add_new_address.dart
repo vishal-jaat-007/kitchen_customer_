@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -26,6 +25,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
   static const LatLng _center = LatLng(29.1492, 75.7217);
   final Set<Marker> _markers = {};
   MapType _currentMapType = MapType.normal;
+  bool loading = false;
 
   late final TextEditingController _houseNoController;
   late final TextEditingController _addressTitleController;
