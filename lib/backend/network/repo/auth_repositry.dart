@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:tiffin_service_customer/backend/network/Exceptions/exceptions.dart';
 import 'package:tiffin_service_customer/backend/network/repo/baseservices.dart';
 import 'package:tiffin_service_customer/backend/network/repo/sharedPerf.dart';
@@ -33,8 +32,11 @@ class AuthRepositry extends Authentication {
         throw DefaultException(message: "User not found.");
       }
     } on FirebaseAuthException catch (e) {
+      print("Firebase Code ******* ");
       throw getResponseFirebase(e);
     } catch (e) {
+      print("Forenase code # 3*******");
+
       throw DefaultException(
           message: "An unknown error occurred: ${e.toString()}");
     }

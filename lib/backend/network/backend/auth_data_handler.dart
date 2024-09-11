@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tiffin_service_customer/backend/network/Exceptions/exceptions.dart';
 import 'package:tiffin_service_customer/backend/network/repo/auth_repositry.dart';
@@ -34,6 +33,7 @@ class AuthDataHandler {
       await SpData.setprafdata(SpData.userid, usersnapshot.uid);
       Get.offNamed(Routes.bottomnavigationbar);
     } on FirebaseAuthException catch (e) {
+      print("Firebase Auth Exception **** ");
       // Handle Firebase specific exceptions
       if (e.code == 'user-not-found') {
         throw DefaultException(message: 'No user found for that email.');
@@ -45,8 +45,10 @@ class AuthDataHandler {
             message: 'An unknown error occurred. Please try again later.');
       }
     } on AppExceptions catch (e) {
+      print("App Exception * **** ");
       throw e; // Rethrow to handle in UI
     } catch (e) {
+      print("Catch Exception **** ");
       throw DefaultException(
           message: 'An unknown error occurred. Please try again later.');
     }

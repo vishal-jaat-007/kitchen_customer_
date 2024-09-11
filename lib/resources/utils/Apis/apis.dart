@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:tiffin_service_customer/backend/network/backend/Firebaseresponse.dart';
 import 'package:tiffin_service_customer/view_model/controllers/auth/user_controller.dart';
 
 class Apis {
   static final _firestore = FirebaseFirestore.instance;
-  static final _firebasehandler = FirebaseResponseHandler();
   static final _firebaseStorage = FirebaseStorage.instance;
 
   // Collection References

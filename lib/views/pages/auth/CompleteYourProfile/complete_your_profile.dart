@@ -152,8 +152,10 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
                         hinttext: "DD/MM/YY"),
                     Gap(20),
                     GenderDropDownWidget(
-                      genderController: _genderController,
-                    ),
+                      onGenderChanged: (val) {
+                        _genderController.text = val ?? 'null';
+                      },
+                    )
                   ],
                 ),
               ),

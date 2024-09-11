@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:tiffin_service_customer/backend/network/Exceptions/exceptions.dart';
 import 'package:tiffin_service_customer/backend/network/backend/auth_data_handler.dart';
 import 'package:tiffin_service_customer/resources/Validator/validators.dart';
 import 'package:tiffin_service_customer/resources/config/app_services.dart';
@@ -106,24 +105,19 @@ class _LoginviewState extends State<Loginview> {
                                 email: _email.text,
                                 password: _password.text,
                               );
-                              // Navigate only if login is successful
                             } catch (e) {
-                              print("Login Error: ${e.toString()}");
-                              // Show error message
                               Get.snackbar(
                                 "Login Error",
-                                e is DefaultException
-                                    ? "e.message"
-                                    : 'An unknown error occurred. Please try again.',
+                                e.toString(),
                                 backgroundColor: styles.appcolors.darkorange,
                                 colorText: styles.appcolors.whitecolor,
                                 snackPosition: SnackPosition.BOTTOM,
                               );
-                            } finally {
-                              setState(() {
-                                loading = false;
-                              });
-                            }
+                          } finally {
+                            setState(() {
+                              loading = false;
+                            });
+                          }
                           }
                         },
                         isExpanded: true,

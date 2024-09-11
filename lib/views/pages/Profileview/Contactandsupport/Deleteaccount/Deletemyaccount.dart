@@ -14,11 +14,12 @@ class Deletemyaccount extends StatelessWidget {
   Deletemyaccount({super.key});
 
   List<Map<String, dynamic>> proceeding = [
-    {
+    { 
       "key": LanguageConstants.dataloss.tr,
       "value": LanguageConstants.restoreyouraccount.tr
     },
     {
+       
       "key": LanguageConstants.inablilitytorestore.tr,
       "value": LanguageConstants.wewont.tr
     },

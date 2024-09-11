@@ -23,10 +23,8 @@ class AddNewAddress extends StatefulWidget {
 }
 
 class _AddNewAddressState extends State<AddNewAddress> {
-  Completer<GoogleMapController> _controller = Completer();
   static const LatLng _center = LatLng(29.1492, 75.7217);
   final Set<Marker> _markers = {};
-  LatLng _lastMapPosition = _center;
   MapType _currentMapType = MapType.normal;
 
   late final TextEditingController _houseNoController;

@@ -1,29 +1,34 @@
 import 'dart:io'; // Required for File
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:tiffin_service_customer/resources/config/routes/app_routes.dart';
 import 'package:tiffin_service_customer/resources/i18n/translation_files.dart';
 import 'package:tiffin_service_customer/singletonClasses/singleton.dart';
 import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controller/theme_controller.dart';
 import 'package:tiffin_service_customer/view_model/controllers/auth/user_controller.dart';
-import 'package:tiffin_service_customer/views/components/container/containerwidget.dart';
 import 'package:tiffin_service_customer/views/components/Button/Primarybtn.dart';
-import 'package:gap/gap.dart';
+import 'package:tiffin_service_customer/views/components/container/containerwidget.dart';
 
 class Profilewidget extends StatelessWidget {
   Profilewidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-  
     SingleTonClass styles = SingleTonClass.instance;
     final controller = Get.find<ThemeController>();
     final user = Get.find<UserController>();
 
     // Determine if the profile image is a URL or local file
-    Uri uri = Uri.parse(user.user.profileImage);
-    bool isNetworkImage = uri.isAbsolute;
+    String profileImage = user.user.profileImage ?? '';
+    Uri uri = Uri.tryParse(profileImage) ?? Uri();
+    bool isNetworkImage = uri.isAbsolute && profileImage.isNotEmpty;
+    bool isLocalFile = File(profileImage).existsSync();
+
+    // Default image in case of no valid profile image
+    String defaultImage = styles.appimg.Profileimg; // Path to default image
 
     return Stack(alignment: Alignment(0, -1.8), children: [
       Padding(
@@ -53,11 +58,14 @@ class Profilewidget extends StatelessWidget {
       ),
       ClipRRect(
         borderRadius: BorderRadius.circular(100),
-        child: isNetworkImage
-            ? Image.network(user.user.profileImage,
+        child: (profileImage.isEmpty || !isNetworkImage && !isLocalFile)
+            ? Image.asset(defaultImage,
                 height: 100, width: 100, fit: BoxFit.cover)
-            : Image.file(File(user.user.profileImage),
-                height: 100, width: 100, fit: BoxFit.cover),
+            : isNetworkImage
+                ? Image.network(profileImage,
+                    height: 100, width: 100, fit: BoxFit.cover)
+                : Image.file(File(profileImage),
+                    height: 100, width: 100, fit: BoxFit.cover),
       ),
     ]);
   }

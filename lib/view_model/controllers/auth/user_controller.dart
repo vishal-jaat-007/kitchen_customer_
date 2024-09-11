@@ -7,7 +7,7 @@ class UserController extends GetxController {
   var _user = Usermodel().obs;
   Usermodel get user => _user.value;
 
-  // Method to set user data
+  // Method to set user data]]
   void setUser(Usermodel userdata) {
     _user.value = userdata;
   }

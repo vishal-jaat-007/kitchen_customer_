@@ -8,9 +8,9 @@ import 'package:tiffin_service_customer/view_model/controllers/Theme%20Controlle
 import 'package:tiffin_service_customer/view_model/enums/enums.dart';
 
 class GenderDropDownWidget extends StatelessWidget {
-  final TextEditingController? genderController;
+  final Function(String?) onGenderChanged;
 
-  GenderDropDownWidget({super.key, this.genderController});
+  GenderDropDownWidget({super.key, required this.onGenderChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,7 @@ class GenderDropDownWidget extends StatelessWidget {
     final optionsList = Gender.values.map((e) => e.toString()).toList();
 
     return TextDropdownFormField(
-      controller:
-          DropdownEditingController(value: genderController?.text ?? ''),
+      controller: DropdownEditingController(),
       options: optionsList,
       dropdownHeight: 100,
       dropdownItemColor: styles.appcolors.primarycolor,
@@ -40,9 +39,9 @@ class GenderDropDownWidget extends StatelessWidget {
         labelText: LanguageConstants.gender.tr,
         suffixIcon: Icon(Icons.keyboard_arrow_down_outlined),
       ),
-      onChanged: (String? value) {
-        if (genderController != null) {
-          genderController!.text = value ?? ''; // Ensure value is not null
+      onChanged: (dynamic value) {
+        if (value is String) {
+          onGenderChanged(value); // Call the function with the selected value
         }
       },
     );

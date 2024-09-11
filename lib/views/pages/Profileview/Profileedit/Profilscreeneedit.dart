@@ -42,7 +42,7 @@ class _ProfileeditState extends State<Profileedit> {
     super.initState();
     _userController = Get.find<UserController>();
     _nameController =
-        TextEditingController(text: _userController.user.username ?? '');
+        TextEditingController(text: _userController.user.username ?? "");
     _emailController =
         TextEditingController(text: _userController.user.email ?? '');
     _birthDateController =
@@ -168,7 +168,11 @@ class _ProfileeditState extends State<Profileedit> {
                       hinttext: "DD/MM/YY",
                     ),
                     Gap(30),
-                    GenderDropDownWidget(genderController: _genderController),
+                    GenderDropDownWidget(
+                      onGenderChanged: (val) {
+                        _genderController.text = val ?? '';
+                      },
+                    )
                   ],
                 ),
               ),
@@ -191,8 +195,7 @@ class _ProfileeditState extends State<Profileedit> {
                             email: _emailController.text.trim(),
                             dob: _birthDateController.text.trim(),
                             gender: _genderController.text.trim(),
-                            profileImage:
-                                imageFile, 
+                            profileImage: imageFile,
                           );
 
                           _userController.setUser(Usermodel(
@@ -200,10 +203,9 @@ class _ProfileeditState extends State<Profileedit> {
                             username: _nameController.text.trim(),
                             email: _emailController.text.trim(),
                             dob: _birthDateController.text.trim(),
-                            // gender: _genderController.text.trim(),
+                            gender: _genderController.text.trim(),
                             profileImage: imageFile?.path ??
-                                _userController.user
-                                    .profileImage, 
+                                _userController.user.profileImage,
                           ));
 
                           Profileeditdialog(); // Show success dialog

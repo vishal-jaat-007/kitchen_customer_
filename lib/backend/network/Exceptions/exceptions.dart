@@ -29,7 +29,7 @@ class DefaultException extends AppExceptions {
   DefaultException({required super.message})
       : super(prefix: "Something Went Wrong!");
 }
-    
+
 String getResponse(HttpResponse response) {
   final statusCode = response.statusCode;
   switch (statusCode) {
@@ -42,7 +42,8 @@ String getResponse(HttpResponse response) {
       throw DefaultException(message: "Something Went Wrong Try again later");
   }
 }
-AppExceptions getResponseFirebase(FirebaseAuthException exception) {
+
+AppExceptions   getResponseFirebase(FirebaseAuthException exception) {
   final code = exception.code;
   print("Firebase Error Code: $code");
   switch (code) {
@@ -57,6 +58,8 @@ AppExceptions getResponseFirebase(FirebaseAuthException exception) {
           message: "No user corresponding to the given email.");
     case "wrong-password":
       return CommunicationException(message: "The password is invalid.");
+    case "invalid-credential":
+      return CommunicationException(message: "The password is invalid.");
     case "email-already-in-use":
       return BadRequest(
           message: "The email address is already in use by another account.");
@@ -68,4 +71,3 @@ AppExceptions getResponseFirebase(FirebaseAuthException exception) {
           message: "An unknown error occurred. Please try again later.");
   }
 }
-

@@ -26,10 +26,10 @@ class Usermodel {
         dob = json.data["dob"] ?? "",
         createdAt = json.data["createdAt"] != null
             ? DateTime.tryParse(json.data["createdAt"])
-            : null,
+            : null, 
         profileImage = json.data["profileImage"] ?? "";
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {   
         "uid": uid,
         "email": email,
         "username": username,
@@ -43,7 +43,7 @@ class Usermodel {
     String? uid,
     String? email,
     String? username,
-    String? gender,
+    String? gender,  
     String? dob,
     DateTime? createdAt,
     String? profileImage,
@@ -51,11 +51,11 @@ class Usermodel {
     return Usermodel(
       uid: uid ?? this.uid,
       email: email ?? this.email,
-      username: username ?? this.username,
+      username: username ?? this.username,  
       gender: gender ?? this.gender,
       dob: dob ?? this.dob,
       createdAt: createdAt ?? this.createdAt,
       profileImage: profileImage ?? this.profileImage,
     );
   }
-}
+}   

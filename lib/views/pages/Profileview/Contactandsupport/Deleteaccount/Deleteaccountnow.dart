@@ -19,7 +19,8 @@ class Deleteaccountnow extends StatefulWidget {
 }
 
 class _DeleteaccountnowState extends State<Deleteaccountnow> {
-  var _Passwordvisibal = false;
+  var _Passwordvisibal = false; 
+  final TextEditingController _pswrdcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class _DeleteaccountnowState extends State<Deleteaccountnow> {
         child: ListView(children: [
           Containerwidget(
               child: Column(
-            children: [
+            children: [   
               Text(LanguageConstants.confirmproceed.tr,
                   style: styles.textthme.fs20_semibold),
               Gap(14),
@@ -48,6 +49,7 @@ class _DeleteaccountnowState extends State<Deleteaccountnow> {
                       style: styles.textthme.fs14_regular)),
               Gap(5),
               TextFormField(
+                  controller: _pswrdcontroller,
                   obscureText: _Passwordvisibal,
                   decoration: PrimaryDecorations.primaryTextFieldDecoration
                       .copyWith(

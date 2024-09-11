@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -124,23 +123,14 @@ class _SignupState extends State<Signup> {
                                 ),
                                 password: _password.text,
                               );
-                            } on PlatformException catch (e) {
+                            } catch (e) {
                               Get.snackbar(
-                                'Signup Error',
-                                e.message ?? 'An unexpected error occurred.',
+                                "Sign Up Error",
+                                e.toString(),
                                 backgroundColor: styles.appcolors.darkorange,
                                 colorText: styles.appcolors.whitecolor,
                                 snackPosition: SnackPosition.BOTTOM,
                               );
-                            } catch (e) {
-                              print(e.toString());
-                              // Get.snackbar(
-                              //   'Signup Error',
-                              //   'An unexpected error occurred.',
-                              //   backgroundColor: styles.appcolors.darkorange,
-                              //   colorText: styles.appcolors.whitecolor,
-                              //   snackPosition: SnackPosition.BOTTOM,
-                              // );
                             } finally {
                               setState(() {
                                 loading = false;
