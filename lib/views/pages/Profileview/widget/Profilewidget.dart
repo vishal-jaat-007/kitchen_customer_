@@ -1,4 +1,4 @@
-import 'dart:io'; // Required for File
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -16,7 +16,7 @@ class Profilewidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
+    bool loading = false;
     SingleTonClass styles = SingleTonClass.instance;
     final controller = Get.find<ThemeController>();
     final user = Get.find<UserController>();
@@ -51,14 +51,16 @@ class Profilewidget extends StatelessWidget {
           ]),
         ),
       ),
-      ClipRRect(
-        borderRadius: BorderRadius.circular(100),
-        child: isNetworkImage
-            ? Image.network(user.user.profileImage,
-                height: 100, width: 100, fit: BoxFit.cover)
-            : Image.file(File(user.user.profileImage),
-                height: 100, width: 100, fit: BoxFit.cover),
-      ),
+      loading == false
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: isNetworkImage
+                  ? Image.network(user.user.profileImage,
+                      height: 100, width: 100, fit: BoxFit.cover)
+                  : Image.file(File(user.user.profileImage),
+                      height: 100, width: 100, fit: BoxFit.cover),
+            )
+          : CircularProgressIndicator(),
     ]);
   }
 }

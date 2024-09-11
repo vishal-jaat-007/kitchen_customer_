@@ -12,10 +12,8 @@ class _DataScreenState extends State<DataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Meal Data'),
-      ),
-      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      appBar: AppBar(title: Text('Meal Data')),
+      body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("offer").snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

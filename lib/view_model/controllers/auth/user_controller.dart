@@ -9,7 +9,7 @@ class UserController extends GetxController {
 
   // Method to set user data
   void setUser(Usermodel userdata) {
-    _user.value = userdata;
+    _user.value = userdata;  
   }
 
   // Reactive loading state

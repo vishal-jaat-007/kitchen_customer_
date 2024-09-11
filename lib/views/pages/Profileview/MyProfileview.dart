@@ -11,7 +11,7 @@ class Myprofileview extends StatelessWidget {
           "route": Routes.Applicationsetting
         }
       ];
-
+ 
   @override
   Widget build(BuildContext context) {
     FirebaseAuth _auth = FirebaseAuth.instance;
@@ -21,27 +21,31 @@ class Myprofileview extends StatelessWidget {
           child: Column(
         children: [
           Stack(alignment: Alignment(-1, 1.4), children: [
-            Container(
-              height: 240.h,
-              alignment: Alignment.topLeft,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(40.r),
-                    bottomRight: Radius.circular(40.r)),
-                gradient: LinearGradient(end: Alignment.topCenter, colors: [
-                  styles.appcolors.lightorange,
-                  Color(0xffFFAE45),
-                  Color(0xffFFCB6B),
-                  Color(0xffFFDA85),
-                  styles.appcolors.lightyellow,
-                  styles.appcolors.lightyellow
+                  Container(
+                    height: 240.h,
+                    alignment: Alignment.topLeft,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(40.r),
+                          bottomRight: Radius.circular(40.r)),
+                      gradient:
+                          LinearGradient(end: Alignment.topCenter, colors: [
+                        styles.appcolors.lightorange,
+                        Color(0xffFFAE45),
+                        Color(0xffFFCB6B),
+                        Color(0xffFFDA85),
+                        styles.appcolors.lightyellow,
+                        styles.appcolors.lightyellow
+                      ]),
+                    ),
+                  ),
+                  Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Image.asset(styles.appicon.circle)),
+                  Profilewidget()
                 ]),
-              ),
-            ),
-            Positioned(
-                top: 0, right: 0, child: Image.asset(styles.appicon.circle)),
-            Profilewidget()
-          ]),
+             
           Gap(30.h),
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),

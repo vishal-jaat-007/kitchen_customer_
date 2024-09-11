@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:tiffin_service_customer/backend/network/backend/Firebaseresponse.dart';
 import 'package:tiffin_service_customer/view_model/model/address/address_model.dart';
-import 'package:tiffin_service_customer/view_model/model/firebase/firebaseResponsemode.dart';
 
 class AddressController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

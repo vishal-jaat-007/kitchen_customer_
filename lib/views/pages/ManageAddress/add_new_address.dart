@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -26,6 +25,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
   Completer<GoogleMapController> _controller = Completer();
   static const LatLng _center = LatLng(29.1492, 75.7217);
   final Set<Marker> _markers = {};
+  // ignore: unused_field
   LatLng _lastMapPosition = _center;
   MapType _currentMapType = MapType.normal;
   bool loading = false;
@@ -74,11 +74,10 @@ class _AddNewAddressState extends State<AddNewAddress> {
         _contactNameController.text.isNotEmpty &&
         _contactNumberController.text.isNotEmpty) {
       final addressModel = AddressModel(
-        addresstitle: _addressTitleController.text,
-        contactName: _contactNameController.text,
-        houseNo: _houseNoController.text,
-        contactNumber: _contactNumberController.text,
-      );
+          addresstitle: _addressTitleController.text,
+          contactName: _contactNameController.text,
+          houseNo: _houseNoController.text,
+          contactNumber: _contactNumberController.text);
 
       await _addressController.addAddress(addressModel.toMap());
 
@@ -101,85 +100,65 @@ class _AddNewAddressState extends State<AddNewAddress> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          children: [
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-                child: Row(children: [
-                  IconButton(
-                      onPressed: () {
-                        Get.back(canPop: true);
-                      },
-                      icon: Icon(Icons.arrow_back)),
-                  Expanded(
-                      child: SearchTextField(
-                          tittle: LanguageConstants
-                              .search_for_available_service_area.tr,
-                          shadow: true,
-                          ontap: () {},
-                          readOnly: false))
-                ])),
-            Container(
-              height: Appservices.getScreenHeight() / 2,
-              child: GoogleMap(
-                onMapCreated: _onMapCreated,
-                initialCameraPosition:
-                    CameraPosition(target: _center, zoom: 18.0),
-                mapType: _currentMapType,
-                markers: _markers,
-                onCameraMove: _onCameraMove,
-              ),
-            ),
-            Containerwidget(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Textfieldwidget(
-                    controller: _houseNoController,
-                    hinttext:
-                        "${LanguageConstants.house_no.tr} / ${LanguageConstants.building_name.tr}",
-                  ),
-                  Gap(10),
-                  Textfieldwidget(
-                    controller: _addressTitleController,
-                    hinttext: LanguageConstants.address_title.tr,
-                  ),
-                  Gap(10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Textfieldwidget(
-                          controller: _contactNameController,
-                          hinttext: LanguageConstants.contact_name.tr,
-                        ),
-                      ),
-                      Gap(10),
-                      Expanded(
-                        child: Textfieldwidget(
-                          controller: _contactNumberController,
-                          hinttext: LanguageConstants.contact_number.tr,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Gap(10),
-                  Row(
-                    children: [
-                      Primarybtn(
-                        loading: loading,
-                        isExpanded: true,
-                        name: LanguageConstants.saved_address.tr,
-                        onPressed: _createAddress,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+        body: SafeArea(
+            child: ListView(children: [
+      Padding(
+          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+          child: Row(children: [
+            IconButton(
+                onPressed: () {
+                  Get.back(canPop: true);
+                },
+                icon: Icon(Icons.arrow_back)),
+            Expanded(
+                child: SearchTextField(
+                    tittle:
+                        LanguageConstants.search_for_available_service_area.tr,
+                    shadow: true,
+                    ontap: () {},
+                    readOnly: false))
+          ])),
+      Container(
+          height: Appservices.getScreenHeight() / 2,
+          child: GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition:
+                  CameraPosition(target: _center, zoom: 18.0),
+              mapType: _currentMapType,
+              markers: _markers,
+              onCameraMove: _onCameraMove)),
+      Containerwidget(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Textfieldwidget(
+            controller: _houseNoController,
+            hinttext:
+                "${LanguageConstants.house_no.tr} / ${LanguageConstants.building_name.tr}"),
+        Gap(10),
+        Textfieldwidget(
+            controller: _addressTitleController,
+            hinttext: LanguageConstants.address_title.tr),
+        Gap(10),
+        Row(children: [
+          Expanded(
+              child: Textfieldwidget(
+                  controller: _contactNameController,
+                  hinttext: LanguageConstants.contact_name.tr)),
+          Gap(10),
+          Expanded(
+              child: Textfieldwidget(
+                  controller: _contactNumberController,
+                  hinttext: LanguageConstants.contact_number.tr))
+        ]),
+        Gap(10),
+        Row(children: [
+          Primarybtn(
+              loading: loading,
+              isExpanded: true,
+              name: LanguageConstants.saved_address.tr,
+              onPressed: _createAddress)
+        ])
+      ]))
+    ])));
   }
 }

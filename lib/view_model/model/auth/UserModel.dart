@@ -58,4 +58,5 @@ class Usermodel {
       profileImage: profileImage ?? this.profileImage,
     );
   }
+
 }

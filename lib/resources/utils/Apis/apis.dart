@@ -1,14 +1,11 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:tiffin_service_customer/backend/network/backend/Firebaseresponse.dart';
 import 'package:tiffin_service_customer/view_model/controllers/auth/user_controller.dart';
 
 class Apis {
   static final _firestore = FirebaseFirestore.instance;
-  static final _firebasehandler = FirebaseResponseHandler();
   static final _firebaseStorage = FirebaseStorage.instance;
 
   // Collection References
@@ -23,7 +20,6 @@ class Apis {
   static Future<List<Map<String, dynamic>>> getSavedAddresses({
     required String userId,
   }) async {
-    // Check for a valid userId
     if (userId.isEmpty) {
       throw Exception('Invalid userId: It must be a non-empty string.');
     }
@@ -42,7 +38,7 @@ class Apis {
   }
 
 //  ----------------------
-// -----------------
+// ----------------
 
   static Future<String?> uploadImageToFirebase(File image) async {
     try {
@@ -118,7 +114,7 @@ class Apis {
         profileImageUrl = existingProfileImageUrl;
       }
 
-      // Update the user document with the new data
+      // Update  user document
       await userDocumentRef(id).update({
         'username': username,
         'email': email,
