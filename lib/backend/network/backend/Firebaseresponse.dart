@@ -16,7 +16,7 @@ class FirebaseResponseHandler {
     try {
       if (path is CollectionReference) {
         response = await _getDataFromCollection(path);
-      } else if (path is DocumentReference) {
+      } else if (path is DocumentReference) {        
         response = await _getDataFromDocument(path);
       } else {
         response = await _getDataFromQuery(path as Query);
@@ -26,7 +26,7 @@ class FirebaseResponseHandler {
     }
   }
 
-  // -------
+  // ------- 
 // --------------------
 // ----------
 
@@ -48,7 +48,7 @@ class FirebaseResponseHandler {
       DocumentReference reff) async {
     FirebaseResponseModel? result;
     try {
-      final snapshot = await reff.get();
+      final snapshot = await reff.get();    
       result = FirebaseResponseModel.fromResponse(snapshot);
     } catch (e) {
       rethrow;

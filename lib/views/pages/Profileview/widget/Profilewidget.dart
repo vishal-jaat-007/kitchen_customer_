@@ -1,5 +1,4 @@
-import 'dart:io'; // Required for File
-
+import 'dart:io'; 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -22,7 +21,7 @@ class Profilewidget extends StatelessWidget {
     final user = Get.find<UserController>();
 
     // Determine if the profile image is a URL or local file
-    String profileImage = user.user.profileImage ?? '';
+    String profileImage = user.user.profileImage ?? "";
     Uri uri = Uri.tryParse(profileImage) ?? Uri();
     bool isNetworkImage = uri.isAbsolute && profileImage.isNotEmpty;
     bool isLocalFile = File(profileImage).existsSync();

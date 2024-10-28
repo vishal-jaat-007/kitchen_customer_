@@ -19,8 +19,8 @@ class Appicon {
   String facebook = "assets/icons/facebook.png";
 
   String circle = "assets/icons/circle.png";
-  String add = "assets/icons/add.png";
-  String cancel = "assets/icons/cancel.png";
+  String add = "assets/icons/add.png";                                                                                                         
+  String  cancel = "assets/icons/cancel.png";
   String check = "assets/icons/check.png";
   String checkicon = "assets/icons/check_icon.png";
 

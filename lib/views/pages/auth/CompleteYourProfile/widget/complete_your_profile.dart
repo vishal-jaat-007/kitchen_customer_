@@ -41,7 +41,7 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
   void initState() {
     super.initState();
 
-    // Retrieve user data from arguments
+    //  user data from arguments
     var args = Get.arguments as Map<String, dynamic>;
 
     userId = args['uid'] as String;
@@ -161,7 +161,7 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
                             loading = true;
                           });
                           setState(() {
-                            loading = true;
+                            loading = true; 
                           });
 
                           try {
@@ -174,7 +174,7 @@ class _CompleteYourProfileState extends State<CompleteYourProfile> {
                               profileImage: imagefile,
                             );
                             Get.toNamed(Routes.bottomnavigationbar);
-                          } catch (e) {
+                          } catch (e) { 
                             print(e.toString());
                           } finally {
                             setState(() {

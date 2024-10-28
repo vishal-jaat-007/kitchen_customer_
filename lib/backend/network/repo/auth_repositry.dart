@@ -23,7 +23,7 @@ class AuthRepositry extends Authentication {
           email: email, password: password);
       final doc = await Apis.userDocumentRef(credential.user!.uid).get();
 
-      if (doc.exists) {
+      if (doc.exists) { 
         final userData =
             Usermodel.fromJson(FirebaseResponseModel.fromResponse(doc), doc.id);
         await SpData.setprafdata(SpData.userid, doc.id);

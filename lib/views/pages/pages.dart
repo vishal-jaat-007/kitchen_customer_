@@ -5,7 +5,7 @@ export 'Profileview/Billingscreen/Billingscreen.dart';
 // -----PROFILE EDIT SCREEN--
 export 'Profileview/Profileedit/Profilscreeneedit.dart';
 export 'Profileview/profile.dart';
-export 'auth/CompleteYourProfile/complete_your_profile.dart';
+export 'auth/CompleteYourProfile/widget/complete_your_profile.dart';
 export 'auth/Loginview/Otpverfication.dart';
 // ------ALL LOGIN SCREEN---
 

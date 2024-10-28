@@ -16,29 +16,8 @@ class Apis {
   static DocumentReference userDocumentRef(String id) =>
       userCollectionRef.doc(id);
 
-  // Method to get saved addresses
-  static Future<List<Map<String, dynamic>>> getSavedAddresses({
-    required String userId,
-  }) async {
-    if (userId.isEmpty) {
-      throw Exception('Invalid userId: It must be a non-empty string.');
-    }
 
-    try {
-      QuerySnapshot snapshot = await userDocumentRef(userId)
-          .collection('addresses')
-          .orderBy('createdAt', descending: true)
-          .get();
-      return snapshot.docs
-          .map((doc) => {'id': doc.id, ...doc.data() as Map<String, dynamic>})
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to fetch addresses: $e');
-    }
-  }
-
-//  ----------------------
-// ----------------
+// ---------------- 
 
   static Future<String?> uploadImageToFirebase(File image) async {
     try {
@@ -62,7 +41,7 @@ class Apis {
     required String gender,
     required String phoneNumber,
     required DateTime createdAt,
-    File? profileImage, // Add profileImage parameter
+    File? profileImage, 
   }) async {
     try {
       String? profileImageUrl;
@@ -76,13 +55,13 @@ class Apis {
         'dob': dob.isNotEmpty ? dob : null,
         'gender': gender.isNotEmpty ? gender : null,
         'phoneNumber': phoneNumber.isNotEmpty ? phoneNumber : null,
-        'profileImage': profileImageUrl, // Store the image URL
+        'profileImage': profileImageUrl,
         'createdAt': createdAt.toIso8601String(),
       });
     } catch (e) {
       throw Exception('Failed to add user: $e');
     }
-  }
+  } 
 
   static Future<void> updateUser({
     required String id,
@@ -93,24 +72,19 @@ class Apis {
     File? profileImage,
   }) async {
     try {
-      // Fetch the current user data to retrieve the existing profile image URL
       DocumentSnapshot userDoc = await userDocumentRef(id).get();
       if (!userDoc.exists) {
         throw Exception('User does not exist');
       }
 
-      // Safely cast the document data to Map<String, dynamic>
       final data = userDoc.data() as Map<String, dynamic>?;
 
-      // Get the existing profile image URL from Firestore
       String? existingProfileImageUrl = data?['profileImage'] as String?;
 
-      // If a new profile image is provided, upload it and get the new URL
       String? profileImageUrl;
       if (profileImage != null) {
         profileImageUrl = await uploadImageToFirebase(profileImage);
       } else {
-        // Use the existing profile image URL if no new image is provided
         profileImageUrl = existingProfileImageUrl;
       }
 

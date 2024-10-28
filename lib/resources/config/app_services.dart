@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:tiffin_service_customer/views/pages/auth/CompleteYourProfile/complete_your_profile.dart';
+import 'package:tiffin_service_customer/views/pages/auth/CompleteYourProfile/widget/complete_your_profile.dart';
 
 class Appservices {
   static double getScreenHeight() => Get.height;

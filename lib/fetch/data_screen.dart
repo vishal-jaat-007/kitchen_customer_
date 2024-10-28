@@ -7,7 +7,7 @@ class DataScreen extends StatefulWidget {
 
   @override
   State<DataScreen> createState() => _DataScreenState();
-}
+}   
 
 class _DataScreenState extends State<DataScreen> {
   @override
@@ -34,7 +34,7 @@ class _DataScreenState extends State<DataScreen> {
                 final meal = item["meals"][0];
 
                 return Column(
-                  children: [
+                  children: [ 
                     Container(
                       decoration: BoxDecoration(
                           color: AppColor().darkorange,
@@ -45,8 +45,6 @@ class _DataScreenState extends State<DataScreen> {
                           Text(meal["meal_category"]),
                           Text(meal["meal_id"]),
                           Text(meal["meal_name"]),
-                          Text(
-                              "SDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFsdfggggggggggggggggggggggggf")
                         ],
                       ),
                     ),

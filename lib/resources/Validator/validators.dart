@@ -5,7 +5,7 @@ abstract class AppValidator {
 
 class TextValidator extends AppValidator {
   @override
-  String? validate(String title, String? value) {
+  String? validate(String title, String? value) { 
     if (value == null || value.isEmpty) {
       return "Please Enter the ${title.isEmpty ? "value" : title}";
     }
